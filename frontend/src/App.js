@@ -35,6 +35,7 @@ class App extends Component {
         this.addTask = this.addTask.bind(this);
         this.updateTask = this.updateTask.bind(this);
         this.autosetDetailWindow = this.autosetDetailWindow.bind(this);
+        this.showLoginModal = this.showLoginModal.bind(this);
     }
 
     // Get User Data
@@ -204,6 +205,11 @@ class App extends Component {
             this.getUserData();
         })
 
+    }
+
+    // showLoginModal
+    showLoginModal(event) {
+        console.log("test");
     }
 
     // Component Will Mount

@@ -21,9 +21,12 @@ app.listen(PORT, () => {
     console.log(`We are live on port ${PORT}.`)
 })
 
+
+/*
 process.on('SIGINT', function() {
     mongoose.connection.close(function () {
       console.log('Mongoose disconnected on app termination');
       process.exit(0);
     });
-  });
+});
+*/

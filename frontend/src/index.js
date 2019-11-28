@@ -15,9 +15,11 @@ ReactDOM.render(
     document.getElementById("app")
     );
 
+/*
 process.on('SIGINT', function() {
     mongoose.connection.close(function () {
     console.log('Mongoose disconnected on app termination');
     process.exit(0);
     });
 });
+*/

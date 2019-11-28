@@ -7,6 +7,10 @@ const GetTask = require("../models/task.js");
 const GetUserInfo = require("../models/user_info.js");
 
 module.exports = function(app) {
+     // MongoDB via Mongoose
+     const MONGO_PASSWORD = "rm6MQS0QV6dJ";
+     const DB_NAME = "taskBucket";
+     mongoose.connect(`mongodb+srv://conureAdmin:${MONGO_PASSWORD}@conure-uoviv.azure.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`);
 
     // Get User Data
     // ------------------------------------------------------------------------
@@ -18,8 +22,6 @@ module.exports = function(app) {
                 foo: "bar"
             }
         })
-
-        mongoose.connection.close();
     })
     // ------------------------------------------------------------------------
 
@@ -35,9 +37,6 @@ module.exports = function(app) {
             info: `Account key generated.`,
             key: key
         });
-
-        mongoose.connection.close();
-
     })
     // ------------------------------------------------------------------------
 
@@ -50,10 +49,6 @@ module.exports = function(app) {
             const coll_name = `user_${id}`;
             const username = req.query.username;
             
-            // MongoDB via Mongoose
-            const MONGO_PASSWORD = "rm6MQS0QV6dJ";
-            const DB_NAME = "taskBucket";
-            mongoose.connect(`mongodb+srv://conureAdmin:${MONGO_PASSWORD}@conure-uoviv.azure.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`);
 
             // Creating an instance of the UserInfo model.
             const UserInfo = GetUserInfo(coll_name);
@@ -107,16 +102,12 @@ module.exports = function(app) {
             const id = req.query.id;
             const coll_name = `user_${id}`;
 
-            // MongoDB via Mongoose
-            const MONGO_PASSWORD = "rm6MQS0QV6dJ";
-            const DB_NAME = "taskBucket";
-            mongoose.connect(`mongodb+srv://conureAdmin:${MONGO_PASSWORD}@conure-uoviv.azure.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`);
-
+        
             // Getting the models
             const UserInfo = GetUserInfo(coll_name);
             const Task = GetTask(coll_name);
 
-            console.log(Task);
+            console.log(Task); 
 
             // Retrieving the documents from mongo
             UserInfo.find({}).lean().then( 
@@ -146,21 +137,18 @@ module.exports = function(app) {
                         user_info: doc.userInfo,
                         tasks: doc.tasks
                     })
-
-                    mongoose.connection.close();
                 } else {
                     res.json({
                         result: "error",
                         info: "Invalid id."
                     })
 
-                    mongoose.connection.close();
                 }
                 
             })
 
         } catch (error) {
-            console.log(error);
+            console.log(error.message);
 
             res.json({
                 result: "error",
@@ -186,8 +174,7 @@ module.exports = function(app) {
              // MongoDB via Mongoose
              const MONGO_PASSWORD = "rm6MQS0QV6dJ";
              const DB_NAME = "taskBucket";
-             mongoose.connect(`mongodb+srv://conureAdmin:${MONGO_PASSWORD}@conure-uoviv.azure.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`);
- 
+             
              // Getting the models
              const Task = GetTask(coll_name);     
 
@@ -201,8 +188,7 @@ module.exports = function(app) {
              // Saving the Task Record to MongoDB
             task.save(coll_name)
             .then(doc => {
-                // Closing the connection.
-                mongoose.connection.close();
+    
             })
             .then(
                 res.json({
@@ -215,8 +201,7 @@ module.exports = function(app) {
                     result: "error",
                     info: error
                 })
-
-                mongoose.connection.close();
+                                          
             })
 
         } catch ( error ) {
@@ -226,8 +211,6 @@ module.exports = function(app) {
                 result: "error",
                 info: error.message
             });
-
-            mongoose.connection.close();
         }
     })
     // ------------------------------------------------------------------------
@@ -248,7 +231,6 @@ module.exports = function(app) {
         // MongoDB via Mongoose
         const MONGO_PASSWORD = "rm6MQS0QV6dJ";
         const DB_NAME = "taskBucket";
-        mongoose.connect(`mongodb+srv://conureAdmin:${MONGO_PASSWORD}@conure-uoviv.azure.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`);
 
         // Getting the models
         const Task = GetTask(coll_name);   
@@ -258,8 +240,7 @@ module.exports = function(app) {
         // Removing the Task
         Task.remove({"_id": taskId})
         .then(() => {
-            // Closing the connection.
-            mongoose.connection.close();
+
         })
         .then(
             res.json({
@@ -297,9 +278,7 @@ module.exports = function(app) {
 
             // MongoDB via Mongoose
             const MONGO_PASSWORD = "rm6MQS0QV6dJ";
-            const DB_NAME = "taskBucket";
-            mongoose.connect(`mongodb+srv://conureAdmin:${MONGO_PASSWORD}@conure-uoviv.azure.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`);
-        
+            const DB_NAME = "taskBucket";        
 
             // Getting the Models
             const Task = GetTask(coll_name);
@@ -319,7 +298,6 @@ module.exports = function(app) {
     
             userInfo.save({}, () => {
                 console.log("Done.");
-                mongoose.connection.close();
             })
 
             res.json({
@@ -334,7 +312,6 @@ module.exports = function(app) {
                 info: error.message
             })
 
-            mongoose.connection.close();
         }
 
     })
