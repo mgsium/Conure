@@ -35,7 +35,6 @@ class App extends Component {
         this.addTask = this.addTask.bind(this);
         this.updateTask = this.updateTask.bind(this);
         this.autosetDetailWindow = this.autosetDetailWindow.bind(this);
-        this.showLoginModal = this.showLoginModal.bind(this);
     }
 
     // Get User Data
@@ -207,11 +206,6 @@ class App extends Component {
 
     }
 
-    // showLoginModal
-    showLoginModal(event) {
-        console.log("test");
-    }
-
     // Component Will Mount
     componentWillMount() {
         this.getUserData();
@@ -229,7 +223,7 @@ class App extends Component {
             <>
                 <div id="LoadingScreen" className={cx(Styles.LoadingScreen)}></div>
 
-                <ConureNavbar id="ConureNavbar"/>
+                <ConureNavbar id="ConureNavbar" showLoginModal={this.showLoginModal}/>
                 <ConureTaskWindow id="ConureTaskWindow" tasks={this.state.tasks} removeTask={this.removeTask} addTask={this.addTask} showDetail={this.showDetail}/>
                 <ConureDetailWindow 
                     id="ConureDetailWindow"    
