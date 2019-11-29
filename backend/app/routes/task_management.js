@@ -65,8 +65,6 @@ module.exports = function(app) {
                     result: "success",
                     info: `A new MongoDB collection has been set up for ${coll_name}, ${username}.`
                 })
-                // Closing the connection.
-                mongoose.connection.close();
             })
             .catch(error => {
                 res.json({
@@ -74,7 +72,6 @@ module.exports = function(app) {
                     info: error
                 })
 
-                mongoose.connection.close();
             })
                 
         } catch (error) {
@@ -84,9 +81,8 @@ module.exports = function(app) {
                 result: "error",
                 info: error
             }) 
-
-            mongoose.connection.close();
         }
+
     })
     // ------------------------------------------------------------------------
 
@@ -107,7 +103,7 @@ module.exports = function(app) {
             const UserInfo = GetUserInfo(coll_name);
             const Task = GetTask(coll_name);
 
-            console.log(Task); 
+            console.log(coll_name); 
 
             // Retrieving the documents from mongo
             UserInfo.find({}).lean().then( 

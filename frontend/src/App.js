@@ -35,6 +35,8 @@ class App extends Component {
         this.addTask = this.addTask.bind(this);
         this.updateTask = this.updateTask.bind(this);
         this.autosetDetailWindow = this.autosetDetailWindow.bind(this);
+        this.Login = this.Login.bind(this);
+        this.createAccount = this.createAccount.bind(this);
     }
 
     // Get User Data
@@ -206,6 +208,29 @@ class App extends Component {
 
     }
 
+    // Login
+    Login(b64key) {
+        // Check if account exists (backend request)
+        document.location = `${document.location.href.split("?")[0]}?id=${b64key}`;
+    }
+
+    // createAccount
+    createAccount(username) {
+        let URL = "http://localhost:3501/generateID"
+
+        fetch(URL)
+        .then( res => res.json() )
+        .then( doc => {
+            const key = doc.key;
+            URL = `http://localhost:3501/createUserBucket?id=${key}&username=${username}`;
+
+            fetch(URL)
+            .then(() => {
+                document.location = `${document.location.href.split("?")[0]}?id=${key}`;
+            })
+        })
+    }
+
     // Component Will Mount
     componentWillMount() {
         this.getUserData();
@@ -223,7 +248,12 @@ class App extends Component {
             <>
                 <div id="LoadingScreen" className={cx(Styles.LoadingScreen)}></div>
 
-                <ConureNavbar id="ConureNavbar" showLoginModal={this.showLoginModal}/>
+                <ConureNavbar 
+                    id="ConureNavbar" 
+                    showLoginModal={this.showLoginModal} 
+                    loginHandler={this.Login}
+                    createAccount={this.createAccount}
+                />
                 <ConureTaskWindow id="ConureTaskWindow" tasks={this.state.tasks} removeTask={this.removeTask} addTask={this.addTask} showDetail={this.showDetail}/>
                 <ConureDetailWindow 
                     id="ConureDetailWindow"    

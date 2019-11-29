@@ -11,6 +11,20 @@ const Styles = {
         width: 8%;
         margin-right: 4%;
     `,
+    userKeyStyle: css `
+        font-family: 'Goudy Bookletter 1911', serif;
+        font-weight: bold;
+        position: absolute;
+        left: 50%;
+        transform: translate(-50%,0);
+        transition: all 0.5s;
+
+        &:hover {
+            color: grey;
+            font-size: 1.1em;
+            cursor: pointer;
+        }
+    `,
     LoginLinkWrapperStyle: css `
         text-decoration: none !important;
     `,
