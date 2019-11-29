@@ -233,11 +233,13 @@ class App extends Component {
     }
 
     // Add XP
-    addXP(points) {
+    addXP(event, points) {
         let user = this.state.user;
         user.xp += points;
         this.setState({user: user});
         console.log(user);
+        
+        // Remove Task Below
     }
 
     // Component Will Mount

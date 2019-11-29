@@ -36,6 +36,18 @@ const Styles = {
             border-bottom: 1px solid black;
         }
     `,
+    ControlPanelStyles: css `
+        text-align: center;
+        padding: 25px;
+
+        background-color: white;
+        border: 1px solid gainsboro;
+        border-radius: 5px;
+    `,
+    ButtonStyles: css `
+        margin-left: 5px;
+        margin-right: 5px;
+    `
 }
 
 export default Styles;
