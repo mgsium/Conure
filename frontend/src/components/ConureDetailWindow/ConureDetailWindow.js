@@ -68,6 +68,7 @@ class ConureDetailWindow extends Component {
                     <h4>{time_target}</h4>
                     <ButtonGroup>
                         <Button variant={this.state.toggleCoundownButtonVariant} onClick={this.toggleCountdown}>{this.state.toggleCoundownButtonContent}</Button>
+                        <Button variant="primary" onClick={() => {this.props.addXP(20)}}>Mark as Done</Button>
                     </ButtonGroup>
                 </Container>
             </div>

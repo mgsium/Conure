@@ -26,7 +26,7 @@ class App extends Component {
 
         // Level Information
         this.levelImages = ["/png/pigeon.png", "/png/flamingo.png", "/png/pelican.png", "/png/bluebird.png", "/jpg/puffin.jpg", "/png/conure-light.png"];
-        this.levelThresholds = [0, 30, 40, 60, 90, 130];
+        this.levelThresholds = [0, 150, 250, 450, 750, 900];
 
         // Method Bindings
         this.getUserData = this.getUserData.bind(this);
@@ -37,6 +37,7 @@ class App extends Component {
         this.autosetDetailWindow = this.autosetDetailWindow.bind(this);
         this.Login = this.Login.bind(this);
         this.createAccount = this.createAccount.bind(this);
+        this.addXP = this.addXP.bind(this);
     }
 
     // Get User Data
@@ -231,6 +232,14 @@ class App extends Component {
         })
     }
 
+    // Add XP
+    addXP(points) {
+        let user = this.state.user;
+        user.xp += points;
+        this.setState({user: user});
+        console.log(user);
+    }
+
     // Component Will Mount
     componentWillMount() {
         this.getUserData();
@@ -259,6 +268,7 @@ class App extends Component {
                     id="ConureDetailWindow"    
                     currentTask={this.state.currentTask} 
                     updateTask={this.updateTask}
+                    addXP={this.addXP}
                 />
                 <ConureUserBar 
                     id="ConureUserBar" 
