@@ -4,12 +4,13 @@ const Styles = {
     DetailWindowWrapperStyle: css `
         background-color: white;
         position: absolute;
-        height: 90%;
+        height: 52%;
         right: 0px;
         width: 60vw;
         padding: 15px;
         font-family: "Oxygen", sans-serif;
         font-weight: bold;
+        border-bottom: 1px solid gainsboro;
     `,
     TaskBodyStyle: css`
         outline: 0;

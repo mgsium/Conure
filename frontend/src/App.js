@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import ConureNavbar from "./components/ConureNavbar/ConureNavbar";
 import ConureTaskWindow from "./components/ConureTaskWindow/ConureTaskWindow";
 import ConureDetailWindow from "./components/ConureDetailWindow/ConureDetailWindow";
+import ConureQuoteWindow from "./components/ConureQuoteWindow/ConureQuoteWindow";
 import ConureUserBar from "./components/ConureUserBar/ConureUserBar";
 
 import { cx } from "emotion";
@@ -21,16 +22,19 @@ class App extends Component {
             newPoints: 0,
             currentTask: {
                 
-            }
+            },
+            counting: false,
         };
 
         // Level Information
-        this.levelImages = ["/png/pigeon.png", "/png/flamingo.png", "/png/pelican.png", "/png/bluebird.png", "/jpg/puffin.jpg", "/png/conure-light.png"];
+        this.levelImages = ["/png/pigeon.png", "/png/flamingo.png", "/png/pelican.png", "/png/bluebird.png", "/png/puffin.png", "/png/conure-light.png"];
         this.levelThresholds = [0, 150, 250, 450, 750, 900];
 
         // Method Bindings
         this.getUserData = this.getUserData.bind(this);
         this.showDetail = this.showDetail.bind(this);
+        this.toggleCountdown = this.toggleCountdown.bind(this);
+        this.countdown = this.countdown.bind(this);
         this.removeTask = this.removeTask.bind(this);
         this.addTask = this.addTask.bind(this);
         this.updateTask = this.updateTask.bind(this);
@@ -105,6 +109,24 @@ class App extends Component {
 
         // Set the new current task in state.
         this.setState({ currentTask: currentTask });
+    }
+
+    // Toggle Countdown
+    toggleCountdown() {
+        this.setState({counting: !this.state.counting}, () => {
+            console.log(`Counting: ${this.state.counting}`);
+            this.countdown();
+        });
+    }    
+
+    // Countdown
+    countdown() {
+        const interval = setInterval(() => {
+            console.log("Tick");
+            if(this.counting == false) {
+              clearInterval(otherThis.interval);  
+            }
+        }, 1000)
     }
 
     // Update Task
@@ -265,12 +287,22 @@ class App extends Component {
                     loginHandler={this.Login}
                     createAccount={this.createAccount}
                 />
-                <ConureTaskWindow id="ConureTaskWindow" tasks={this.state.tasks} removeTask={this.removeTask} addTask={this.addTask} showDetail={this.showDetail}/>
+                <ConureTaskWindow 
+                    id="ConureTaskWindow" 
+                    tasks={this.state.tasks} 
+                    removeTask={this.removeTask} 
+                    addTask={this.addTask} 
+                    showDetail={this.showDetail}
+                />
                 <ConureDetailWindow 
                     id="ConureDetailWindow"    
                     currentTask={this.state.currentTask} 
                     updateTask={this.updateTask}
                     addXP={this.addXP}
+                    toggleCountdown={this.toggleCountdown}
+                />
+                <ConureQuoteWindow
+                    id="ConureQuoteWindow"
                 />
                 <ConureUserBar 
                     id="ConureUserBar" 

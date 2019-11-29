@@ -25,8 +25,8 @@ class ConureDetailWindow extends Component {
         console.log("Toggling Countdown...")
         let counting = !this.state.counting;
 
-        if (!counting) {
-            console.log("Stopping")
+        if (counting) {
+            console.log("Starting")
 
             this.setState({
                 counting: counting,
@@ -34,15 +34,19 @@ class ConureDetailWindow extends Component {
                 toggleCoundownButtonContent: "Stop"
             });
         } else {
-            console.log("Starting")
+            console.log("Stopping")
 
             this.setState({
                 counting: counting,
                 toggleCoundownButtonVariant: "success",
                 toggleCoundownButtonContent: "Start"
             });
+
         }
+
+        this.props.toggleCountdown();
     }
+    
     componentDidMount() {
         document.getElementById("taskBodyField").addEventListener("input", ( event ) => {
             this.props.updateTask(event);
