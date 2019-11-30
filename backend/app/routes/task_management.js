@@ -258,6 +258,8 @@ module.exports = function(app) {
     // ------------------------------------------------------------------------
     app.put("/updateUserInfo", ( req, res ) => {
         // Collecting params
+        console.log(req.body);
+
         const params = req.body;
         let userInfo = params.user;
         let tasks = params.tasks;

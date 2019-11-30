@@ -115,17 +115,48 @@ class App extends Component {
     toggleCountdown() {
         this.setState({counting: !this.state.counting}, () => {
             console.log(`Counting: ${this.state.counting}`);
-            this.countdown();
+            if (this.state.counting) {
+                this.countdown();
+            }
         });
     }    
 
     // Countdown
     countdown() {
+        const outerThis = this;
+        let currentTask = {};
+        let tempKey = 0;
+
+        const URL = `http://localhost:3501/updateUserInfo`;
+        let body = {} 
+
         const interval = setInterval(() => {
-            console.log("Tick");
-            if(this.counting == false) {
-              clearInterval(otherThis.interval);  
-            }
+            currentTask = this.state.currentTask;
+            currentTask.target -= 1000
+            outerThis.setState({currentTask: currentTask}, () => {
+                if(outerThis.state.counting == false) {
+                    clearInterval(interval);  
+                    
+                    // Save to MongoDB
+                    body = JSON.stringify({
+                        "user": outerThis.state.user,
+                        "tasks": outerThis.state.tasks,
+                    })
+                    console.log(body);
+
+                    fetch(URL, {
+                        headers: {
+                            "Content-type": "application/json"
+                        },
+                        method: "PUT",
+                        body: body,
+                    })
+                    .then( res => res.json )
+                    .then( res => {
+                        console.log(res);    
+                    })
+                }
+            });
         }, 1000)
     }
 
