@@ -19,19 +19,33 @@ class ConureNavbar extends Component {
         super(props);
         this.state = {
             showModal: false,
+            showSettingsModal: false,
         }
         this.userKey = (new URLSearchParams(window.location.search)).get("id");
 
         // Method Bindings
         this.open = this.open.bind(this);
         this.close = this.close.bind(this);
+        this.openSettingsModal = this.openSettingsModal.bind(this);
+        this.closeSettingsModal = this.closeSettingsModal.bind(this);
     }
+
     open() {
         this.setState({showModal: true});
     }
+
     close() {
         this.setState({showModal: false});
     }
+
+    openSettingsModal() {
+        this.setState({showSettingsModal: true});
+    }
+
+    closeSettingsModal() {
+        this.setState({showSettingsModal: false});
+    }
+
     render() {
         const popover = (
             <Popover id="idInfo">
@@ -57,6 +71,9 @@ class ConureNavbar extends Component {
                             <small className={ cx( Styles.LoginLinkStyle ) } onClick={this.open}>Login</small>
                         </a>
                     </Nav>
+                    <Navbar.Brand href="#" onClick={this.openSettingsModal}>
+                        <i className={ cx("fas", "fa-cog", Styles.SettingsIconStyle) }></i>
+                    </Navbar.Brand>
                 </Navbar>
 
                 <Modal show={this.state.showModal} onHide={this.close}>
@@ -93,6 +110,21 @@ class ConureNavbar extends Component {
                                 </Form.Group>
                             </Form>
                         </Container>
+                    </Modal.Body>
+                </Modal>
+
+                <Modal show={this.state.showSettingsModal} onHide={this.closeSettingsModal}>
+                    <Modal.Header closeButton>
+                        <i className="fas fa-cog"></i>
+                        <Modal.Title className={ cx(Styles.ModalHeaderStyles) }>Settings</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <h5>Background Color</h5>
+                        <div className={ cx("text-center") }>
+                            <button className={ cx(Styles.ColorSelector, Styles.BgRed) }></button>
+                            <button className={ cx(Styles.ColorSelector, Styles.BgDefault) }></button>
+                        </div>
+                        <p className="text-muted"><i>/* Settings Checkboxes */</i></p>
                     </Modal.Body>
                 </Modal>
             </div>

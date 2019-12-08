@@ -6,6 +6,8 @@ import ListGroup from "react-bootstrap/ListGroup";
 import { cx } from "emotion";
 import Styles from "./ConureTaskWindowStyles.js";
 
+import $ from "jquery";
+
 class ConureTaskWindow extends Component {
     constructor(props) {
         super(props);
@@ -16,8 +18,10 @@ class ConureTaskWindow extends Component {
                 <Container className={ cx( Styles.TaskWindowContainerStyle ) } fluid>
                     {/* <h6>Task Window</h6> */}
                     <ListGroup className={ cx( Styles.TaskListStyle ) } variant="flush">
+                        {/*
                         <ListGroup.Item className={ cx( Styles.TaskStyle ) }>Download the Simple Timer React Component.</ListGroup.Item>
                         <ListGroup.Item className={ cx( Styles.TaskStyle ) }>Set up MongoDB Backend</ListGroup.Item>
+                        */}
                         {
                             this.props.tasks.map( task => 
                             <div id={task._id} key={task._id} className={ cx(Styles.TaskWrapperStyle) }>
@@ -28,7 +32,7 @@ class ConureTaskWindow extends Component {
                             </div>
                             )
                         }
-                        <ListGroup.Item className={ cx( Styles.AddTaskBtnStyle ) } onClick={this.props.addTask} variant="danger">
+                        <ListGroup.Item className={ cx( Styles.AddTaskBtnStyle ) } onClick={() => {$("#toggleCountdownBtn").click();this.props.addTask();}} variant="danger">
                             Add Task + 
                         </ListGroup.Item>
                     </ListGroup>

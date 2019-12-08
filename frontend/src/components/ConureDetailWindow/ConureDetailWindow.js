@@ -8,6 +8,8 @@ import Jumbotron from "react-bootstrap/Jumbotron";
 import { cx } from "emotion";
 import Styles from "./ConureDetailWindowStyles.js";
 
+import $ from "jquery";
+
 class ConureDetailWindow extends Component {
     constructor(props) {
         super(props);
@@ -75,16 +77,40 @@ class ConureDetailWindow extends Component {
                         suppressContentEditableWarning={true}
                         spellCheck={false} 
                         className={ cx(Styles.TaskBodyStyle) } 
+                        placeholder="Type here!"
                     >{body}</div>
                     <br/>
                     <hr/>
                     <Jumbotron className={ cx(Styles.ControlPanelStyles) } fluid>
                         <Container>
-                            <small className={ cx("text-muted") }><i>Time Left</i></small>
-                            <h4>{`${time_target.getHours()}h ${time_target.getMinutes()}m ${time_target.getSeconds()}s`}</h4>
-                            <br/>
-                            <Button className={ cx(Styles.ButtonStyles) } variant={this.state.toggleCoundownButtonVariant} onClick={this.toggleCountdown} size="sm">{this.state.toggleCoundownButtonContent}</Button>
-                            <Button className={ cx(Styles.ButtonStyles) }variant="primary" onClick={(event) => {this.props.addXP(event, 20)}} size="sm">Mark as Done</Button>
+                            {(() => {
+                                console.log("test");
+
+                                if (this.props.currentTask._id) {
+                                    // console.log(this.props.currentTask);
+                                    
+                                    return (
+                                        <>
+                                            <small className={ cx("text-muted") }><i>Time Left</i></small>
+                                            <h4>{`${time_target.getHours()}h ${time_target.getMinutes()}m ${time_target.getSeconds()}s`}</h4>
+                                            <br/>
+                                            <Button id="toggleCountdownBtn" className={ cx(Styles.ButtonStyles) } variant={this.state.toggleCoundownButtonVariant} onClick={this.toggleCountdown} size="sm">{this.state.toggleCoundownButtonContent}</Button>
+                                            <Button className={ cx(Styles.ButtonStyles) }variant="primary" onClick={(event) => {
+                                                this.setState({counting: false}, () => {
+                                                    // console.log(`Counting: ${this.state.counting}`);
+                                                    this.props.markAsDone(event, this.props);
+                                                });
+                                                }} size="sm">Mark as Done</Button>
+                                        </>
+                                    )
+                                } else {
+                                    return (
+                                        <h4 className={ cx("text-muted") }>
+                                            <i>Click the red button to add a task!</i>
+                                        </h4>
+                                    )
+                                }
+                                })() }
                         </Container>
                     </Jumbotron>
                 </Container>

@@ -9,6 +9,9 @@ const Styles = {
         bottom:0;
         right:0;
         background:rgba(0,0,0,.5);
+    `,
+    AppWrapperStyle: css `
+        background-color: rgba(220, 255, 204, 0.5);
     `
 }
 

@@ -10,7 +10,7 @@ app.options("*", cors({
     origin: "*",
 }))
 
-const PORT = 3501
+const PORT = process.env.PORT || 3501
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());

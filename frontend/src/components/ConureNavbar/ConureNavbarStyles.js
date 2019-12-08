@@ -25,6 +25,36 @@ const Styles = {
             cursor: pointer;
         }
     `,
+    SettingsIconStyle: css `
+        transition: all 0.5s;
+        margin-left: 25px;
+
+        &:hover {
+            color: grey;
+            cursor: pointer;
+            font-size: 1.2em;
+        }
+    `,
+    ColorSelector: css `
+        border-radius: 50%;
+        width: 25px;
+        height: 25px;
+        transition: all 0.5s;
+        border: 0px;
+        margin-right: 5px;
+        margin-left: 5px;
+
+        &:hover {
+            width: 40px;
+            height: 40px;
+        }
+    `,
+    BgDefault: css `
+        background-color: rgba(220, 255, 204, 0.5);
+    `,
+    BgRed: css `
+        background-color: rgba(255, 0, 0, 0.5);
+    `,
     LoginLinkWrapperStyle: css `
         text-decoration: none !important;
     `,

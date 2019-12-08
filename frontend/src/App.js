@@ -41,6 +41,7 @@ class App extends Component {
         this.autosetDetailWindow = this.autosetDetailWindow.bind(this);
         this.Login = this.Login.bind(this);
         this.createAccount = this.createAccount.bind(this);
+        this.markAsDone = this.markAsDone.bind(this);
         this.addXP = this.addXP.bind(this);
     }
 
@@ -55,7 +56,7 @@ class App extends Component {
         }
 
         console.log("Fetching data...")
-        const URL = `http://localhost:3501/importUserData?id=${id}`;
+        const URL = `${this.props.backendUrl}/importUserData?id=${id}`;
         fetch(URL)
         .then(res => res.json())
         .then(data => {
@@ -127,7 +128,7 @@ class App extends Component {
         let currentTask = {};
         let tempKey = 0;
 
-        const URL = `http://localhost:3501/updateUserInfo`;
+        const URL = `${this.props.backendUrl}/updateUserInfo`;
         let body = {} 
 
         const interval = setInterval(() => {
@@ -175,7 +176,7 @@ class App extends Component {
             console.log("Saving...");
 
             // Update Task List & UserInfo Data
-            const URL = "http://localhost:3501/updateUserInfo";
+            const URL = `${this.props.backendUrl}/updateUserInfo`;
             const body = JSON.stringify({
                 user: this.state.user,
                 tasks: this.state.tasks
@@ -198,6 +199,7 @@ class App extends Component {
 
         })
 
+        // ->> Move back to previous position
         // Moving the Caret back to the end
         document.getElementById(targetID).focus();
         document.execCommand('selectAll', false, null);
@@ -206,12 +208,14 @@ class App extends Component {
     }
 
     // removeTask
-    removeTask(event) {
-        // Get the ID of the target Task Element
-        let targetID = event.target.parentNode.parentNode.parentNode.id;
-        if ( !targetID ) targetID = event.target.parentNode.parentNode.id;
+    removeTask(event, targetID = false) {
+        if (!targetID) {
+            // Get the ID of the target Task Element
+            targetID = event.target.parentNode.parentNode.parentNode.id;
+            if ( !targetID ) targetID = event.target.parentNode.parentNode.id;
+        }
 
-        const URL = "http://localhost:3501/removeTask";
+        const URL = `${this.props.backendUrl}/removeTask`;
         // console.log(this.state.user.key, targetID);
         const body = JSON.stringify({
             "id": this.state.user.key,
@@ -239,11 +243,11 @@ class App extends Component {
 
     // addTask
     addTask(event) {
-        const URL = "http://localhost:3501/createTask";
+        const URL = `${this.props.backendUrl}/createTask`;
         const body = JSON.stringify({
             "id": this.state.user.key,
-            "body": "Test Body",
-            "target": Date.now()
+            "body": "Type here.",
+            "target": 10
         })
 
         console.log(body);
@@ -270,19 +274,28 @@ class App extends Component {
 
     // createAccount
     createAccount(username) {
-        let URL = "http://localhost:3501/generateID"
+        let URL = `${this.props.backendUrl}/generateID`;
 
         fetch(URL)
         .then( res => res.json() )
         .then( doc => {
             const key = doc.key;
-            URL = `http://localhost:3501/createUserBucket?id=${key}&username=${username}`;
+            URL = `${this.props.backendUrl}/createUserBucket?id=${key}&username=${username}`;
 
             fetch(URL)
             .then(() => {
                 document.location = `${document.location.href.split("?")[0]}?id=${key}`;
             })
         })
+    }
+
+    // Mark as Done
+    markAsDone(event, taskInfo) {
+        this.addXP(event, 100);
+
+        // Remove Task Below
+        const ID = taskInfo.currentTask._id;
+        this.removeTask(event, ID);
     }
 
     // Add XP
@@ -292,7 +305,6 @@ class App extends Component {
         this.setState({user: user});
         console.log(user);
         
-        // Remove Task Below
     }
 
     // Component Will Mount
@@ -309,7 +321,7 @@ class App extends Component {
     render() {
         {/* Retrieve Mongo Entries via API */}
         return (
-            <>
+            <div className={Styles.AppWrapperStyle}>
                 <div id="LoadingScreen" className={cx(Styles.LoadingScreen)}></div>
 
                 <ConureNavbar 
@@ -329,7 +341,7 @@ class App extends Component {
                     id="ConureDetailWindow"    
                     currentTask={this.state.currentTask} 
                     updateTask={this.updateTask}
-                    addXP={this.addXP}
+                    markAsDone={this.markAsDone}
                     toggleCountdown={this.toggleCountdown}
                 />
                 <ConureQuoteWindow
@@ -343,7 +355,7 @@ class App extends Component {
                     basePoints={this.state.user.xp} 
                     newPoints={this.state.newPoints} 
                 />
-            </>
+            </div>
         )
     }
 }
