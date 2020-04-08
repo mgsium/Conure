@@ -12,6 +12,14 @@ const Styles = {
     `,
     AppWrapperStyle: css `
         background-color: rgba(220, 255, 204, 0.5);
+    `,
+    CenterScreen: css `
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        min-height: 100vh;
     `
 }
 

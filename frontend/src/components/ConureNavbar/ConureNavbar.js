@@ -67,7 +67,7 @@ class ConureNavbar extends Component {
                         <span className={ cx( Styles.userKeyStyle ) } id="userKey">{this.userKey}</span>
                     </OverlayTrigger>
                     <Nav className="ml-auto">
-                        <a href="#" className={ cx( Styles.LoginLinkWrapperStyle ) }>
+                        <a href="#" id="LoginAnchor" className={ cx( Styles.LoginLinkWrapperStyle ) }>
                             <small className={ cx( Styles.LoginLinkStyle ) } onClick={this.open}>Login</small>
                         </a>
                     </Nav>

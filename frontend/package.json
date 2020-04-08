@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "webpack-dev-server --mode development",
     "start": "serve -s -d -u build",
-    "build": "react-scripts build",
+    "build": "webpack",
     "heroku-postbuild": "npm run build"
   },
   "repository": {
@@ -42,6 +42,7 @@
     "jquery": "^3.4.1",
     "react-bootstrap": "^1.0.0-beta.14",
     "react-scripts": "^3.3.0",
+    "react-spinners-kit": "^1.9.1",
     "serve": "^11.2.0",
     "webfontloader": "^1.6.28"
   },

@@ -8,6 +8,7 @@ import ConureUserBar from "./components/ConureUserBar/ConureUserBar";
 
 import { cx } from "emotion";
 import Styles from "./AppStyles";
+import { JellyfishSpinner } from "react-spinners-kit";
 
 import $ from "jquery";
 
@@ -27,8 +28,8 @@ class App extends Component {
         };
 
         // Level Information
-        this.levelImages = ["/png/pigeon.png", "/png/flamingo.png", "/png/pelican.png", "/png/bluebird.png", "/png/puffin.png", "/png/conure-light.png"];
-        this.levelThresholds = [0, 150, 250, 450, 750, 900];
+        this.levelImages = ["/png/eggs.png", "/png/chicklet.png", "/png/pigeon.png", "/png/flamingo.png", "/png/pelican.png", "/png/bluebird.png", "/png/puffin.png", "/png/conure-light.png"];
+        this.levelThresholds = [0, 150, 250, 450, 750, 900, 1300, 1750];
 
         // Method Bindings
         this.getUserData = this.getUserData.bind(this);
@@ -52,8 +53,8 @@ class App extends Component {
 
         if ( !id ) {
             console.log("Error: The id paramater is missing from the url.");
-            return
-        }
+            // document.loacation = "www.conureapp.co.uk/id=signup";
+        } 
 
         console.log("Fetching data...")
         const URL = `${this.props.backendUrl}/importUserData?id=${id}`;
@@ -64,7 +65,7 @@ class App extends Component {
             console.log("Data fetched.")
             console.log(data.user_info);
             console.log(data.tasks);
-            this.setState({user: data.user_info, tasks: data.tasks})
+            this.setState({user: data.user_info, tasks: data.tasks});
         })
         .then(() => {
             this.autosetDetailWindow();
@@ -169,7 +170,8 @@ class App extends Component {
         const tasks = this.state.tasks;
 
         // Applying update to relevant task
-        tasks.forEach( task => { if (task._id  == targetID)  task.body=newBody });
+        if(event) {tasks.forEach( task => { if (task._id  == targetID)  task.body=newBody })};
+
 
         // Set the updated task list in state.
         this.setState({ tasks: tasks }, () => {
@@ -205,6 +207,30 @@ class App extends Component {
         document.execCommand('selectAll', false, null);
         const selection = document.getSelection();
         selection.collapseToEnd();
+    }
+
+    updateUserInfo() {
+        // Update Task List & UserInfo Data
+        const URL = `${this.props.backendUrl}/updateUserInfo`;
+        const body = JSON.stringify({
+            user: this.state.user,
+            tasks: this.state.tasks
+        })
+
+        console.log(this.state.tasks);
+
+        fetch(URL, {
+            headers: {
+                "Content-type": "application/json"
+            },
+            method: "PUT",
+            body: body
+        })
+        .then( res => res.json())
+        .then( data => console.log(data))
+        .catch( (error) => {
+            console.log(error);
+        })
     }
 
     // removeTask
@@ -296,15 +322,17 @@ class App extends Component {
         // Remove Task Below
         const ID = taskInfo.currentTask._id;
         this.removeTask(event, ID);
+
     }
 
     // Add XP
     addXP(event, points) {
         let user = this.state.user;
         user.xp += points;
-        this.setState({user: user});
-        console.log(user);
-        
+        this.setState({user: user}, () => {
+            this.updateUserInfo();
+            console.log(this.state);
+        });
     }
 
     // Component Will Mount
@@ -322,7 +350,15 @@ class App extends Component {
         {/* Retrieve Mongo Entries via API */}
         return (
             <div className={Styles.AppWrapperStyle}>
-                <div id="LoadingScreen" className={cx(Styles.LoadingScreen)}></div>
+                <div id="LoadingScreen" className={cx(Styles.LoadingScreen)}>
+                    <div className={cx(Styles.CenterScreen)}>
+                        <JellyfishSpinner
+                            size = {150}
+                            color = "#686769"
+                            loading = {true}
+                        />
+                    </div>
+                </div>
 
                 <ConureNavbar 
                     id="ConureNavbar" 
