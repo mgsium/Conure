@@ -12,7 +12,23 @@ class ConureTaskWindow extends Component {
     constructor(props) {
         super(props);
     }
+
     render() {
+        if (this.props.userIsLoggedIn) {
+            const addItemBtn = (
+                <ListGroup.Item className={ cx( Styles.AddTaskBtnStyle ) } onClick={ () => {$("#toggleCountdownBtn").click();this.props.addTask();}} variant="danger">
+                    Add Task + 
+                </ListGroup.Item>
+            )
+        } else {
+            const addItemBtn = (
+                <ListGroup.Item className={ cx( Styles.AddTaskBtnStyle ) } variant="secondary" disabled={true}>
+                    Add Task +
+                </ListGroup.Item>
+            )
+        }
+        
+
         return (
             <div id={this.props.id} className={ cx( Styles.TaskWindowWrapperStyle ) }>
                 <Container className={ cx( Styles.TaskWindowContainerStyle ) } fluid>
@@ -32,9 +48,18 @@ class ConureTaskWindow extends Component {
                             </div>
                             )
                         }
-                        <ListGroup.Item className={ cx( Styles.AddTaskBtnStyle ) } onClick={() => {$("#toggleCountdownBtn").click();this.props.addTask();}} variant="danger">
-                            Add Task + 
-                        </ListGroup.Item>
+                        {
+                            this.props.userIsLoggedIn  ?  (
+                                    <ListGroup.Item className={ cx( Styles.AddTaskBtnStyle ) } onClick={ () => {$("#toggleCountdownBtn").click();this.props.addTask();}} variant="danger">
+                                        Add Task + 
+                                    </ListGroup.Item>
+                                )
+                            :   (
+                                    <ListGroup.Item className={ cx( Styles.AddTaskBtnDisabledStyle ) } variant="dark">
+                                        Add Task +
+                                    </ListGroup.Item>
+                                )
+                        }
                     </ListGroup>
                 </Container>
             </div>

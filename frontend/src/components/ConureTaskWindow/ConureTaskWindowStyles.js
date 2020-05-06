@@ -24,6 +24,7 @@ const Styles = {
         font-weight: bold;
         font-size: 4mm;
         max-width: 100%;
+        min-height: 50px;
 
         word-wrap: break-word;
         overflow-wrap: break-word;
@@ -41,9 +42,23 @@ const Styles = {
         text-align: center;
         font-weight: bold;
         font-family: "Goudy Bookletter 1911", serif;
+        transition: all 0.2s;
+
         &:hover {
             cursor: pointer;
             background: rgba(217, 83, 79, 8);
+            font-size: 1.1em;
+        }
+    `,
+    AddTaskBtnDisabledStyle: css `
+        text-align: center;
+        font-weight: bold;
+        font-family: "Goudy Bookletter 1911", serif;
+        transition: all 1s;
+
+        &:hover {
+            cursor:pointer;
+            background: rgba(40, 40, 20, 0.7);
         }
     `,
     DeleteIconStyle: css `

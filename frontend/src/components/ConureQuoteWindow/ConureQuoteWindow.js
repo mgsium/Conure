@@ -13,8 +13,11 @@ class ConureQuoteWindow extends Component {
     }
     render() {
         const quotes = [
-            ["Some weeks take decades to happen. Some decades happen in weeks.", "Vladimir Ilyitch Lenin", "The Chief Tasks of Our Day"],
-            ["He who cannnot lie does not know what the truth is.", "Friedrich Nietzsche", "Thus Spoke Zarathustra"]
+            ["There are decades where nothing happens - there are weeks where decades happen.", "Vladimir Ilyitch Lenin", "The Chief Tasks of Our Day"],
+            ["He who cannnot lie does not know what the truth is.", "Friedrich Nietzsche", "Thus Spoke Zarathustra"],
+            ["In the face of ambiguity, refuse the temptation to guess.", "Tim Peters","The Zen of Python"],
+            ["Keep your eyes on the stars and your feet on the ground.", "Teddy Roosevelt", ""],
+            ["The eye with which one looks at reality must constantly change.", "Søren Kierkegaard", "Either/Or"]
         ]
 
         const quotesElements = quotes.map(elem => (

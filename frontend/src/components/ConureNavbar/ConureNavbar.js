@@ -59,19 +59,19 @@ class ConureNavbar extends Component {
         return (
             <div id={this.props.id}>
                 <Navbar className={ cx( Styles.NavbarStyle ) } bg="light" expand="lg">
-                    <Navbar.Brand href="#">
-                        <img className={ cx( Styles.LogoStyle ) }  src="../../../public/assets/img/ico/conure-light.ico"/>
+                    <Navbar.Brand data-target="#">
+                        <img className={ cx( Styles.LogoStyle ) }  src={this.props.logoLink}/>
                         Conure
                     </Navbar.Brand>
                     <OverlayTrigger trigger="click" placement="bottom" overlay={popover}>
                         <span className={ cx( Styles.userKeyStyle ) } id="userKey">{this.userKey}</span>
                     </OverlayTrigger>
                     <Nav className="ml-auto">
-                        <a href="#" id="LoginAnchor" className={ cx( Styles.LoginLinkWrapperStyle ) }>
+                        <a data-target="#" id="LoginAnchor" className={ cx( Styles.LoginLinkWrapperStyle ) }>
                             <small className={ cx( Styles.LoginLinkStyle ) } onClick={this.open}>Login</small>
                         </a>
                     </Nav>
-                    <Navbar.Brand href="#" onClick={this.openSettingsModal}>
+                    <Navbar.Brand data-target="#" onClick={this.openSettingsModal}>
                         <i className={ cx("fas", "fa-cog", Styles.SettingsIconStyle) }></i>
                     </Navbar.Brand>
                 </Navbar>

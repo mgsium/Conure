@@ -11,6 +11,17 @@ import Styles from "./AppStyles";
 import { JellyfishSpinner } from "react-spinners-kit";
 
 import $ from "jquery";
+// import caret from "jquery-caret-plugin";
+
+import eggs from "../public/assets/img/png/eggs.png";
+import chicklet from "../public/assets/img/png/chicklet.png";
+import pigeon from "../public/assets/img/png/pigeon.png";
+import flamingo from "../public/assets/img/png/flamingo.png";
+import pelican from "../public/assets/img/png/pelican.png";
+import bluebird from "../public/assets/img/png/bluebird.png";
+import puffin from "../public/assets/img/png/puffin.png";
+import conure_light from "../public/assets/img/png/conure-light.png";
+
 
 class App extends Component {
     constructor(props) {
@@ -27,8 +38,10 @@ class App extends Component {
             counting: false,
         };
 
+        this.userIsLoggedIn = true;
+
         // Level Information
-        this.levelImages = ["/png/eggs.png", "/png/chicklet.png", "/png/pigeon.png", "/png/flamingo.png", "/png/pelican.png", "/png/bluebird.png", "/png/puffin.png", "/png/conure-light.png"];
+        this.levelImages = [eggs, chicklet, pigeon, flamingo, pelican, bluebird, puffin, conure_light];
         this.levelThresholds = [0, 150, 250, 450, 750, 900, 1300, 1750];
 
         // Method Bindings
@@ -52,7 +65,8 @@ class App extends Component {
         const id = params.get("id");
 
         if ( !id ) {
-            console.log("Error: The id paramater is missing from the url.");
+            // console.log("Error: The id paramater is missing from the url.");
+            this.userIsLoggedIn = false;
             // document.loacation = "www.conureapp.co.uk/id=signup";
         } 
 
@@ -130,7 +144,7 @@ class App extends Component {
         let tempKey = 0;
 
         const URL = `${this.props.backendUrl}/updateUserInfo`;
-        let body = {} 
+        let body = {}
 
         const interval = setInterval(() => {
             currentTask = this.state.currentTask;
@@ -172,10 +186,12 @@ class App extends Component {
         // Applying update to relevant task
         if(event) {tasks.forEach( task => { if (task._id  == targetID)  task.body=newBody })};
 
+        let selection = window.getSelection();
+        let caretPosition = selection.getRangeAt(0).startOffset;
 
         // Set the updated task list in state.
         this.setState({ tasks: tasks }, () => {
-            console.log("Saving...");
+            // console.log("Saving...");
 
             // Update Task List & UserInfo Data
             const URL = `${this.props.backendUrl}/updateUserInfo`;
@@ -184,7 +200,7 @@ class App extends Component {
                 tasks: this.state.tasks
             })
 
-            console.log(this.state.tasks);
+            // console.log(this.state.tasks);
 
             fetch(URL, {
                 headers: {
@@ -199,14 +215,24 @@ class App extends Component {
                 console.log(error);
             })
 
+            try {
+                var elem = document.getElementById("taskBodyField");
+                // console.log(elem);
+                var range = document.createRange();
+                range.setStart(elem.childNodes[0], caretPosition);
+                range.collapse(true);
+                selection.removeAllRanges();
+                selection.addRange(range);
+                elem.focus();
+            } catch {} // Do nothing is field is empty
         })
 
         // ->> Move back to previous position
         // Moving the Caret back to the end
-        document.getElementById(targetID).focus();
+        /* document.getElementById(targetID).focus();
         document.execCommand('selectAll', false, null);
         const selection = document.getSelection();
-        selection.collapseToEnd();
+        selection.collapseToEnd(); */
     }
 
     updateUserInfo() {
@@ -217,7 +243,7 @@ class App extends Component {
             tasks: this.state.tasks
         })
 
-        console.log(this.state.tasks);
+        console.log(body);
 
         fetch(URL, {
             headers: {
@@ -310,7 +336,7 @@ class App extends Component {
 
             fetch(URL)
             .then(() => {
-                document.location = `${document.location.href.split("?")[0]}?id=${key}`;
+                document.location = `https://www.conureapp.co.uk/?id=${key}`;
             })
         })
     }
@@ -365,6 +391,7 @@ class App extends Component {
                     showLoginModal={this.showLoginModal} 
                     loginHandler={this.Login}
                     createAccount={this.createAccount}
+                    logoLink={conure_light}
                 />
                 <ConureTaskWindow 
                     id="ConureTaskWindow" 
@@ -372,6 +399,7 @@ class App extends Component {
                     removeTask={this.removeTask} 
                     addTask={this.addTask} 
                     showDetail={this.showDetail}
+                    userIsLoggedIn={this.userIsLoggedIn}
                 />
                 <ConureDetailWindow 
                     id="ConureDetailWindow"    
@@ -379,6 +407,7 @@ class App extends Component {
                     updateTask={this.updateTask}
                     markAsDone={this.markAsDone}
                     toggleCountdown={this.toggleCountdown}
+                    userIsLoggedIn={this.userIsLoggedIn}
                 />
                 <ConureQuoteWindow
                     id="ConureQuoteWindow"

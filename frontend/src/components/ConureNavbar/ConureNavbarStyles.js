@@ -57,6 +57,10 @@ const Styles = {
     `,
     LoginLinkWrapperStyle: css `
         text-decoration: none !important;
+
+        &:hover {
+            cursor: pointer;
+        }
     `,
     LoginLinkStyle: css `
         margin-left: 5vw;

@@ -21,6 +21,7 @@ class ConureDetailWindow extends Component {
 
         // Method Bindings
         this.toggleCountdown = this.toggleCountdown.bind(this);
+
     }
     toggleCountdown( event ) {
         // Toggle Countdown
@@ -53,7 +54,18 @@ class ConureDetailWindow extends Component {
         document.getElementById("taskBodyField").addEventListener("input", ( event ) => {
             this.props.updateTask(event);
         }, false)
+
+        $("#taskBodyField").keydown(this.disableCtrl);
     }
+
+    disableCtrl(event) {
+        // console.log(event.keyCode);
+        if (event.keyCode == 13) {
+            event.preventDefault();
+            return;
+        }
+    }
+
     render() {
         const body = this.props.currentTask.body;
         let time_target = 0
@@ -78,6 +90,7 @@ class ConureDetailWindow extends Component {
                         spellCheck={false} 
                         className={ cx(Styles.TaskBodyStyle) } 
                         placeholder="Type here!"
+                        onChange={this.disableCtrl}
                     >{body}</div>
                     <br/>
                     <hr/>
@@ -103,10 +116,16 @@ class ConureDetailWindow extends Component {
                                                 }} size="sm">Mark as Done</Button>
                                         </>
                                     )
-                                } else {
+                                } else if (this.props.userIsLoggedIn) {
                                     return (
                                         <h4 className={ cx("text-muted") }>
                                             <i>Click the red button to add a task!</i>
+                                        </h4>
+                                    )
+                                } else {
+                                    return (
+                                        <h4 className={ cx("text-muted") }>
+                                            <i>Login to start adding tasks!</i>
                                         </h4>
                                     )
                                 }

@@ -265,7 +265,7 @@ module.exports = function(app) {
         let tasks = params.tasks;
         const coll_name = `user_${userInfo.key}`;
 
-        console.log(params);
+        console.log("Params: " + params);
         
         try {
             if ( !(params.user && params.tasks)) {
@@ -292,8 +292,9 @@ module.exports = function(app) {
                 });
             });
 
+            UserInfo.findOneAndUpdate({}, { xp: params.user.xp })
+
             // Saving New Models
-    
             userInfo.save({}, () => {
                 console.log("Done.");
             })

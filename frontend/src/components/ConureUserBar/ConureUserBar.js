@@ -17,26 +17,31 @@ class ConureUserBar extends Component {
         let basePoints = this.props.basePoints;
         const levelMinPoints = this.props.levelThresholds.reverse().find(elem => elem <= basePoints);
         this.props.levelThresholds.reverse();
-        const levelNumber = this.props.levelThresholds.indexOf(levelMinPoints);
+        let levelNumber = this.props.levelThresholds.indexOf(levelMinPoints);
         basePoints -= levelMinPoints;
         let percentage = basePoints/(this.props.levelThresholds[levelNumber+1] - levelMinPoints) * 100;
         
-        if(!percentage && percentage != 0) {
-            percentage = 100;
+        if(!percentage && percentage != 0) { percentage = 100 }
+
+        const levelImageLink = this.props.levelImages[0];
+
+        if (levelNumber > 0 && levelNumber < this.props.levelImages.length) {
+            const levelImageLink = this.props.levelImages[levelNumber];
+        } else {
+            levelNumber = 0;
         }
 
-        const levelImageLink = this.props.levelImages[levelNumber];
-        const levelImage = <img className={ cx( Styles.LevelImage ) } src={`../../../public/assets/img${levelImageLink}`}></img>
+        const levelImage = <img className={ cx( Styles.LevelImage ) } src={levelImageLink}></img>
 
         return (
             <div id={this.props.id}>
                 <Navbar className={ cx( Styles.UserBarStyle ) } fixed="bottom" expand="lg" bg="light">     
                     <Navbar.Text>
-                        Signed in as: <span id="userNameField" href="#login" style={{"color": "black"}}>{this.props.userName}</span>
+                        Signed in as: <span id="userNameField" data-target="#login" style={{"color": "black"}}>{this.props.userName ? (this.props.userName) : ("Guest")}</span>
                     </Navbar.Text>
                     <div className={ cx( Styles.ProgressBarWrapperStyle ) }>
                         <Navbar.Brand>{levelImage}</Navbar.Brand>
-                        <Navbar.Text>Level {levelNumber}</Navbar.Text>
+                        <Navbar.Text>Level {levelNumber }</Navbar.Text>
                         <ProgressBar className={ cx( Styles.ProgressBarStyle) }>
                             <ProgressBar animated variant="info" now={percentage}></ProgressBar>
                             <ProgressBar animated variant="danger" now={this.props.newPoints}></ProgressBar>
