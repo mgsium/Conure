@@ -19,11 +19,11 @@ const Styles = {
         border-bottom: 1px solid gainsboro;
     `,
     TaskStyle: css `
-        width: 100%;
-        font-family: "Goudy Bookletter 1911", serif;
+        width: 39.9vw;
+        font-family: "Jost", sans-serif;
         font-weight: bold;
         font-size: 4mm;
-        max-width: 100%;
+        max-width: 39.9vw;
         min-height: 50px;
 
         word-wrap: break-word;
@@ -39,9 +39,11 @@ const Styles = {
         border-top: 1px solid gainsboro;
     `,
     AddTaskBtnStyle: css `
+        width: 40vw;
+        max-width: 40vw;
         text-align: center;
         font-weight: bold;
-        font-family: "Goudy Bookletter 1911", serif;
+        font-family: "Jost", sans-serif;
         transition: all 0.2s;
 
         &:hover {
@@ -53,7 +55,7 @@ const Styles = {
     AddTaskBtnDisabledStyle: css `
         text-align: center;
         font-weight: bold;
-        font-family: "Goudy Bookletter 1911", serif;
+        font-family: "Jost", sans-serif;
         transition: all 1s;
 
         &:hover {

@@ -4,23 +4,25 @@ const Styles = {
     QuoteWindowWrapper: css `
         background-color: white;
         position: absolute;
-        height: 38vh;
+        height: 31vh;
         right: 0px;
-        bottom: 17.5px;
+        bottom: 18px;
         width: 60vw;
         padding: 15px;
-        font-family: "Playfair Display", serif;
+        font-family: "Jost", sans-serif;
+        border-top: 1px solid gainsboro;
         border-bottom: 1px solid gainsboro;
         text-align: center;
     `,
     QuoteBody: css `
-        margin-top: 35px;
+        margin-top: 3vh;
         font-weight: 300;
         transition: all 1s;
 
         &:hover {
             font-size: 1.2em;
             color: grey;
+            cursor: pointer;
         }
     `,
     QuoteFooter: css `

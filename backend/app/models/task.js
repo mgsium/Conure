@@ -4,7 +4,8 @@ const mongoose = require("mongoose");
 // Task Schema
 const taskSchema = mongoose.Schema({
     body: String,
-    target: Number
+    target: Number,
+    description: String
 })
 
 // Module Exports

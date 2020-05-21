@@ -11,7 +11,6 @@ const Styles = {
         background:rgba(0,0,0,.5);
     `,
     AppWrapperStyle: css `
-        background-color: rgba(220, 255, 204, 0.5);
     `,
     CenterScreen: css `
         display: flex;
@@ -20,6 +19,7 @@ const Styles = {
         align-items: center;
         text-align: center;
         min-height: 100vh;
+        margin-bottom: 5wh;
     `
 }
 

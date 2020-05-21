@@ -6,7 +6,7 @@ import App from "./App";
 
 WebFont.load({
     google: {
-        families: ["Goudy Bookletter 1911", "Playfair Display", "Rubik", "Oxygen"]
+        families: ["Cabin Sketch", "Playfair Display", "Rubik", "Oxygen", "Jost"]
     }
 })
 

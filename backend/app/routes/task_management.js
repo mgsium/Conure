@@ -29,7 +29,7 @@ module.exports = function(app) {
     // ------------------------------------------------------------------------
     app.get("/generateID", ( req, res ) => {
         // Generate url-friendly Key
-        const key = random_b64(6);
+        const key = random_b64(3);
 
         // Make a response
         res.json({
@@ -163,7 +163,7 @@ module.exports = function(app) {
 
             console.log(params);
 
-            if ( !(params.body && params.target && params.id) ) {
+            if ( !(params.target && params.id && params.body == "" && params.description == "") ) {
                 throw new Error("Incorrect paramaters, provide: body, target, id.");
             }
 
@@ -178,7 +178,8 @@ module.exports = function(app) {
              const task = new Task({
                  key: params.key,
                  body: params.body,
-                 target: params.target
+                 target: params.target,
+                 description: params.description
              })
 
              // Saving the Task Record to MongoDB
@@ -283,7 +284,6 @@ module.exports = function(app) {
             const UserInfo = GetUserInfo(coll_name);
 
             // Making Mongo Models from Objects
-            userInfo = new UserInfo(userInfo);
             tasks = tasks.forEach( task => {
                 const targetID = mongoose.Types.ObjectId(task._id);   
                 Task.remove({"_id": targetID}, () => {
@@ -292,12 +292,12 @@ module.exports = function(app) {
                 });
             });
 
-            UserInfo.findOneAndUpdate({}, { xp: params.user.xp })
+            console.log("User Info");
 
-            // Saving New Models
-            userInfo.save({}, () => {
-                console.log("Done.");
-            })
+            UserInfo.remove({ key : params.user.key }, () => {
+                userInfo = new UserInfo(userInfo);
+                userInfo.save(coll_name).catch();
+            });
 
             res.json({
                 result: "success",

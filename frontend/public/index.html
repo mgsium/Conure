@@ -1,10 +1,8 @@
 <!DOCTYPE html>
-<html style="background-color: rgba(220, 255, 204, 0.5);">
+<html>
     <head>
         <meta charset="UTF-8">
         <title>Conure</title>
-        <!-- Favicon -->
-        <link rel="shortcut-icon" href="./assets/img/ico/conure-light.ico" type="image/x-icon">
         <!-- Bootstrap CSS -->
         <link
             rel="stylesheet"
@@ -15,9 +13,26 @@
     </head>
     <body>
         <div id="app"></div>
-
+        
+        <!-- Quill -->
+        <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+        <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
         <!-- index.js import -->
         <script src="../src/index.js" type="text/babel"></script>
-        <script src="../src/bundle.js"></script>
+        <!-- <script src="../src/bundle.js"></script> -->
+        <!-- Favicon -->
+        <link rel="shortcut-icon" href="favicon.ico">
+        <!-- JQuery -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.js"></script>
+        <script>
+            const colors = ["#faedcb", " rgba(220, 255, 204, 0.5)", "#faf0f9"];
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            $("html").css("background-color", color);
+        </script>
+        <style>
+            .ck-editor__editable {
+                min-height: 22.5vh;
+            }
+        </style>
     </body>
 </html>

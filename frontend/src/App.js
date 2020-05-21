@@ -21,7 +21,7 @@ import pelican from "../public/assets/img/png/pelican.png";
 import bluebird from "../public/assets/img/png/bluebird.png";
 import puffin from "../public/assets/img/png/puffin.png";
 import conure_light from "../public/assets/img/png/conure-light.png";
-
+// import favicon from "../public/assets/img/ico/conure-light.ico";
 
 class App extends Component {
     constructor(props) {
@@ -33,9 +33,10 @@ class App extends Component {
             tasks: [],
             newPoints: 0,
             currentTask: {
-                
+                target: 0
             },
             counting: false,
+            taskRenderComplete: true
         };
 
         this.userIsLoggedIn = true;
@@ -47,16 +48,19 @@ class App extends Component {
         // Method Bindings
         this.getUserData = this.getUserData.bind(this);
         this.showDetail = this.showDetail.bind(this);
-        this.toggleCountdown = this.toggleCountdown.bind(this);
-        this.countdown = this.countdown.bind(this);
+        // this.toggleCountdown = this.toggleCountdown.bind(this);
+        // this.countdown = this.countdown.bind(this);
+        this.updateTime = this.updateTime.bind(this);
         this.removeTask = this.removeTask.bind(this);
         this.addTask = this.addTask.bind(this);
         this.updateTask = this.updateTask.bind(this);
+        this.updateTaskDescription = this.updateTaskDescription.bind(this);
         this.autosetDetailWindow = this.autosetDetailWindow.bind(this);
         this.Login = this.Login.bind(this);
         this.createAccount = this.createAccount.bind(this);
         this.markAsDone = this.markAsDone.bind(this);
         this.addXP = this.addXP.bind(this);
+        this.resetXP = this.resetXP.bind(this);
     }
 
     // Get User Data
@@ -79,7 +83,9 @@ class App extends Component {
             console.log("Data fetched.")
             console.log(data.user_info);
             console.log(data.tasks);
-            this.setState({user: data.user_info, tasks: data.tasks});
+            this.setState({user: data.user_info, tasks: data.tasks}, () => {
+                this.setState({taskRenderComplete: true});
+            });
         })
         .then(() => {
             this.autosetDetailWindow();
@@ -102,7 +108,8 @@ class App extends Component {
         } catch ( error ) {
             this.setState({ currentTask: {
                 body: "",
-                target: ""
+                target: 0,
+                description: ""
             }})
         }
     }
@@ -127,6 +134,7 @@ class App extends Component {
         this.setState({ currentTask: currentTask });
     }
 
+    /*
     // Toggle Countdown
     toggleCountdown() {
         this.setState({counting: !this.state.counting}, () => {
@@ -174,6 +182,15 @@ class App extends Component {
                 }
             });
         }, 1000)
+    }
+    */
+
+    updateTime(newTime) {
+        let currentTask = this.state.currentTask;
+        currentTask.target = newTime;
+        this.setState({currentTask: currentTask}, () => {
+            this.updateUserInfo();
+        });
     }
 
     // Update Task
@@ -235,6 +252,44 @@ class App extends Component {
         selection.collapseToEnd(); */
     }
 
+    updateTaskDescription(event, description) {
+        // Getting the ID of the content editable field, the new body and the tasklist
+        const targetID = this.state.currentTask._id;
+        // const newDesc = $(event.target).text();
+        const tasks = this.state.tasks;
+
+        // Applying update to relevant task
+        if(event) {tasks.forEach( task => { if (task._id  == targetID)  task.description=description })};
+
+        // Set the updated task list in state.
+        this.setState({ tasks: tasks }, () => {
+            // console.log("Saving...");
+
+            // Update Task List & UserInfo Data
+            const URL = `${this.props.backendUrl}/updateUserInfo`;
+            const body = JSON.stringify({
+                user: this.state.user,
+                tasks: this.state.tasks
+            })
+
+            // console.log(this.state.tasks);
+
+            fetch(URL, {
+                headers: {
+                    "Content-type": "application/json"
+                },
+                method: "PUT",
+                body: body
+            })
+            .then( res => res.json())
+            .then( data => console.log(data))
+            .catch( (error) => {
+                console.log(error);
+            })
+
+        })
+    }
+
     updateUserInfo() {
         // Update Task List & UserInfo Data
         const URL = `${this.props.backendUrl}/updateUserInfo`;
@@ -242,8 +297,6 @@ class App extends Component {
             user: this.state.user,
             tasks: this.state.tasks
         })
-
-        console.log(body);
 
         fetch(URL, {
             headers: {
@@ -261,45 +314,50 @@ class App extends Component {
 
     // removeTask
     removeTask(event, targetID = false) {
-        if (!targetID) {
-            // Get the ID of the target Task Element
-            targetID = event.target.parentNode.parentNode.parentNode.id;
-            if ( !targetID ) targetID = event.target.parentNode.parentNode.id;
-        }
+        try {
+            if (!targetID) {
+                // Get the ID of the target Task Element
+                targetID = event.target.parentNode.parentNode.parentNode.id;
+                if ( !targetID ) targetID = event.target.parentNode.parentNode.id;
+            }
 
-        const URL = `${this.props.backendUrl}/removeTask`;
-        // console.log(this.state.user.key, targetID);
-        const body = JSON.stringify({
-            "id": this.state.user.key,
-            "taskId": targetID
-        });
-        fetch(URL, {
-            headers: {
-                "Content-type": "application/json"
-            },
-            method: "PUT",
-            body: body
-        })
+            const URL = `${this.props.backendUrl}/removeTask`;
+            // console.log(this.state.user.key, targetID);
+            const body = JSON.stringify({
+                "id": this.state.user.key,
+                "taskId": targetID
+            });
+            fetch(URL, {
+                headers: {
+                    "Content-type": "application/json"
+                },
+                method: "PUT",
+                body: body
+            })
 
-        // Get Current Task List
-        let tasks = this.state.tasks;
+            // Get Current Task List
+            let tasks = this.state.tasks;
 
-        // Filter out the target task
-        tasks = tasks.filter(task => { return task._id != targetID });
+            // Filter out the target task
+            tasks = tasks.filter(task => { return task._id != targetID });
 
-        // Set the task list to the remaining tasks
-        this.setState({tasks: tasks}, () => {
-            this.autosetDetailWindow();
-        });
+            // Set the task list to the remaining tasks
+            this.setState({tasks: tasks}, () => {
+                this.autosetDetailWindow();
+            });
+        } catch (TypeError) {};
     }
 
     // addTask
     addTask(event) {
+        this.setState({taskRenderComplete: false});
+
         const URL = `${this.props.backendUrl}/createTask`;
         const body = JSON.stringify({
             "id": this.state.user.key,
-            "body": "Type here.",
-            "target": 10
+            "body": "",
+            "target": 3600,
+            "description": ""
         })
 
         console.log(body);
@@ -353,12 +411,24 @@ class App extends Component {
 
     // Add XP
     addXP(event, points) {
+        this.setState({newPoints: points, progressBarLabel: `+${points}`});
+        setTimeout(() => {
+            let user = this.state.user;
+            user.xp += points;
+            this.setState({user: user, newPoints: 0, progressBarLabel: ""}, () => {
+                this.updateUserInfo();
+                // console.log(this.state);
+            });
+        }, 750);
+    }
+
+    // Reset XP
+    resetXP(event) {
         let user = this.state.user;
-        user.xp += points;
+        user.xp = 0;
         this.setState({user: user}, () => {
             this.updateUserInfo();
-            console.log(this.state);
-        });
+        })
     }
 
     // Component Will Mount
@@ -375,7 +445,7 @@ class App extends Component {
     render() {
         {/* Retrieve Mongo Entries via API */}
         return (
-            <div className={Styles.AppWrapperStyle}>
+            <div className={ cx( Styles.AppWrapperStyles ) }>
                 <div id="LoadingScreen" className={cx(Styles.LoadingScreen)}>
                     <div className={cx(Styles.CenterScreen)}>
                         <JellyfishSpinner
@@ -383,6 +453,7 @@ class App extends Component {
                             color = "#686769"
                             loading = {true}
                         />
+                        <em>Changing the world...</em>
                     </div>
                 </div>
 
@@ -392,6 +463,8 @@ class App extends Component {
                     loginHandler={this.Login}
                     createAccount={this.createAccount}
                     logoLink={conure_light}
+                    currentUser={this.state.user}
+                    userIsLoggedIn={this.userIsLoggedIn}
                 />
                 <ConureTaskWindow 
                     id="ConureTaskWindow" 
@@ -400,14 +473,18 @@ class App extends Component {
                     addTask={this.addTask} 
                     showDetail={this.showDetail}
                     userIsLoggedIn={this.userIsLoggedIn}
+                    taskRenderComplete={this.state.taskRenderComplete}
                 />
                 <ConureDetailWindow 
                     id="ConureDetailWindow"    
                     currentTask={this.state.currentTask} 
                     updateTask={this.updateTask}
+                    updateTaskDescription={this.updateTaskDescription}
                     markAsDone={this.markAsDone}
-                    toggleCountdown={this.toggleCountdown}
+                    removeTask={this.removeTask}
+                    updateTime={this.updateTime}
                     userIsLoggedIn={this.userIsLoggedIn}
+                    resetXP={this.resetXP}
                 />
                 <ConureQuoteWindow
                     id="ConureQuoteWindow"
@@ -419,6 +496,7 @@ class App extends Component {
                     levelImages={this.levelImages}
                     basePoints={this.state.user.xp} 
                     newPoints={this.state.newPoints} 
+                    progressBarLabel={this.state.progressBarLabel}
                 />
             </div>
         )

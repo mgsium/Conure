@@ -2,6 +2,7 @@ import React, { Component } from "react";
 
 import Container from "react-bootstrap/Container";
 import ListGroup from "react-bootstrap/ListGroup";
+import Spinner from "react-bootstrap/Spinner";
 
 import { cx } from "emotion";
 import Styles from "./ConureTaskWindowStyles.js";
@@ -11,13 +12,33 @@ import $ from "jquery";
 class ConureTaskWindow extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            addTaskBtnText: true
+        }
+    }
+
+    updateTaskBtn(outerThis) {
+        if (!outerThis.props.taskRenderComplete) {
+            setTimeout(() => {this.updateTaskBtn(outerThis)}, 100);
+        } else {
+            this.setState({addTaskBtnText: true});
+        }
     }
 
     render() {
+        /*
         if (this.props.userIsLoggedIn) {
+            if (this.state.addTaskBtnText) {
+                console.log("Correct");
+            }
             const addItemBtn = (
-                <ListGroup.Item className={ cx( Styles.AddTaskBtnStyle ) } onClick={ () => {$("#toggleCountdownBtn").click();this.props.addTask();}} variant="danger">
-                    Add Task + 
+                <ListGroup.Item className={ cx( Styles.AddTaskBtnStyle ) } onClick={ () => {$("#toggleCountdownBtn").click();this.props.addTask();}} variant="danger" disabled={!this.state.addTaskBtnText}>
+                {
+                this.state.addTaskBtnText ? "Add Task +" :
+                (
+                    <Spinner animation="border" variant="danger"/>
+                )   
+                }
                 </ListGroup.Item>
             )
         } else {
@@ -27,7 +48,7 @@ class ConureTaskWindow extends Component {
                 </ListGroup.Item>
             )
         }
-        
+        */
 
         return (
             <div id={this.props.id} className={ cx( Styles.TaskWindowWrapperStyle ) }>
@@ -39,7 +60,7 @@ class ConureTaskWindow extends Component {
                         <ListGroup.Item className={ cx( Styles.TaskStyle ) }>Set up MongoDB Backend</ListGroup.Item>
                         */}
                         {
-                            this.props.tasks.map( task => 
+                            this.props.tasks.map( (task, index) => 
                             <div id={task._id} key={task._id} className={ cx(Styles.TaskWrapperStyle) }>
                                 <ListGroup.Item key={task._id} id={task._id} className={ cx(Styles.TaskStyle) } onClick={this.props.showDetail}>
                                     {task.body}
@@ -50,8 +71,9 @@ class ConureTaskWindow extends Component {
                         }
                         {
                             this.props.userIsLoggedIn  ?  (
-                                    <ListGroup.Item className={ cx( Styles.AddTaskBtnStyle ) } onClick={ () => {$("#toggleCountdownBtn").click();this.props.addTask();}} variant="danger">
-                                        Add Task + 
+                                    <ListGroup.Item className={ cx( Styles.AddTaskBtnStyle ) } onClick={ () => {this.setState({
+                                        addTaskBtnText: false}); this.props.addTask(); setTimeout(() => {this.updateTaskBtn(this);}, 100)}} variant="danger" disabled={!this.state.addTaskBtnText}>
+                                        {this.state.addTaskBtnText ? "Add Task +" : <Spinner animation="border" variant="danger" size="sm"/>} 
                                     </ListGroup.Item>
                                 )
                             :   (

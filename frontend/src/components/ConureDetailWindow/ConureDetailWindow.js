@@ -1,53 +1,83 @@
 import React, { Component } from "react";
+import ReactDOM from "react-dom";
+import CKEditor from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+
 
 import Container from "react-bootstrap/Container";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Button from "react-bootstrap/Button";
 import Jumbotron from "react-bootstrap/Jumbotron";
+import Modal from "react-bootstrap/Modal";
+import Breadcrumb from "react-bootstrap/Breadcrumb";
+import Nav from "react-bootstrap/Nav";
+import NavItem from "react-bootstrap/NavItem";
+import NavLink from "react-bootstrap/NavLink";
 
 import { cx } from "emotion";
 import Styles from "./ConureDetailWindowStyles.js";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faDumpster, faCheck, faPlus, faMinus, faTools, faBackward } from "@fortawesome/free-solid-svg-icons";
 
 import $ from "jquery";
 
 class ConureDetailWindow extends Component {
     constructor(props) {
         super(props);
+
+        console.log("Props" + this.props);
+
         this.state = {
             counting: false,
-            toggleCoundownButtonVariant: "success",
-            toggleCoundownButtonContent: "Start"
-        }
+            toggleCountdownButtonVariant: "info",
+            toggleCountdownButtonContent: "Start",
+            time: this.props.currentTask.target,
+            initialTime: this.props.currentTask.target,
+            showSettingsModal: false,
+            activeTab: "timer"
+        };
+
+        // const [counter, setCounter] = React.useState(60);
+        this.firstInitComplete = true;
 
         // Method Bindings
         this.toggleCountdown = this.toggleCountdown.bind(this);
+        this.openSettingsModal = this.openSettingsModal.bind(this);
+        this.closeSettingsModal = this.closeSettingsModal.bind(this);
 
     }
+
     toggleCountdown( event ) {
         // Toggle Countdown
         console.log("Toggling Countdown...")
-        let counting = !this.state.counting;
 
-        if (counting) {
+        if (!this.state.counting) {
             console.log("Starting")
 
             this.setState({
-                counting: counting,
-                toggleCoundownButtonVariant: "danger",
-                toggleCoundownButtonContent: "Stop"
+                toggleCountdownButtonVariant: "danger",
+                toggleCountdownButtonContent: "Stop"
             });
+
+            this.timer = setInterval(() => this.setState({
+                time: this.state.time - 1
+            }, () => {console.log(this.state.time);}), 1000);
+
         } else {
             console.log("Stopping")
 
             this.setState({
-                counting: counting,
-                toggleCoundownButtonVariant: "success",
-                toggleCoundownButtonContent: "Start"
+                toggleCountdownButtonVariant: "info",
+                toggleCountdownButtonContent: "Start"
             });
 
+            clearInterval(this.timer);
+            this.props.updateTime(this.state.time);
         }
 
-        this.props.toggleCountdown();
+        this.setState({
+            counting: !this.state.counting
+        })
     }
     
     componentDidMount() {
@@ -55,10 +85,10 @@ class ConureDetailWindow extends Component {
             this.props.updateTask(event);
         }, false)
 
-        $("#taskBodyField").keydown(this.disableCtrl);
+        $("#taskBodyField").keydown(this.disableEnter);
     }
 
-    disableCtrl(event) {
+    disableEnter(event) {
         // console.log(event.keyCode);
         if (event.keyCode == 13) {
             event.preventDefault();
@@ -66,66 +96,129 @@ class ConureDetailWindow extends Component {
         }
     }
 
+    openSettingsModal() {
+        this.setState({showSettingsModal: true});
+    }
+
+    closeSettingsModal() {
+        this.setState({showSettingsModal: false});
+    }
+
+    changeTab(event) {
+        this.setState({ activeTab: event.target.href.split("/").pop() });
+    }
+
     render() {
         const body = this.props.currentTask.body;
-        let time_target = 0
+        const description = this.props.currentTask.description;
+        let time_target = this.state.time;
 
-        try {
-            time_target = new Date(this.props.currentTask.target);
-        } catch(err) {
-            time_target = new Date(0);
+        console.log(`Time Target Type: ${typeof this.state.time}`);
+        if(this.state.initialTime !== this.props.currentTask.target) {
+            this.setState({
+                time: this.props.currentTask.target,
+                initialTime: this.props.currentTask.target
+            });
+            this.firstInitComplete = false;
         }
-
-        console.log(`Time Target Type: ${typeof time_target}`);
+        console.log(typeof this.props.currentTask.target);
+        console.log("Initial Target: " + this.props.currentTask.target);
+        // console.log(this.props.editorHtml);
 
 
         return (
             <div id={this.props.id} className={ cx( Styles.DetailWindowWrapperStyle ) }>
                 <Container fluid>
                     <p>In Detail</p>
+                    <Button className={ cx( Styles.CircleButtonStyles, Styles.SettingsButtonStyles ) } variant="secondary" onClick={this.openSettingsModal}>
+                        <FontAwesomeIcon icon={faTools}></FontAwesomeIcon>
+                    </Button>
+                    <Button type="button" variant="danger" className={ cx( Styles.CircleButtonStyles, Styles.DeleteButtonStyles ) } onClick={(event) => {
+                                                    if (this.props.currentTask._id) {
+                                                        this.setState({counting: false}, () => {
+                                                            this.props.removeTask(event, this.props.currentTask._id);
+                                                        });
+                                                    }
+                                                }}>
+                        <FontAwesomeIcon icon={faDumpster}></FontAwesomeIcon>
+                    </Button>
+                    <Button className={ cx( Styles.CircleButtonStyles, Styles.DoneButtonStyles ) } variant="success" onClick={(event) => {
+                                                    if (this.props.currentTask._id) {
+                                                        this.setState({counting: false}, () => {
+                                                            this.props.markAsDone(event, this.props);
+                                                        });
+                                                    }
+                                                }}>
+                        <FontAwesomeIcon icon={faCheck}></FontAwesomeIcon>
+                    </Button>
                     <hr/>
                     <div id={"taskBodyField"}
                         contentEditable={true} 
                         suppressContentEditableWarning={true}
                         spellCheck={false} 
                         className={ cx(Styles.TaskBodyStyle) } 
-                        placeholder="Type here!"
-                        onChange={this.disableCtrl}
+                        onChange={this.disableEnter}
+                        placeholder={"Type Here..."}
                     >{body}</div>
                     <br/>
                     <hr/>
-                    <Jumbotron className={ cx(Styles.ControlPanelStyles) } fluid>
+                    <Nav className={ cx(Styles.DetailWindowNavStyles) } activeKey="timer" onClick={ event => { event.preventDefault(); this.changeTab(event); }}>
+                        <Nav.Item>
+                            <Nav.Link href="timer">Timer</Nav.Link>
+                        </Nav.Item>
+                        <Nav.Item>
+                            <Nav.Link href="editor">Details</Nav.Link>
+                        </Nav.Item>
+                    </Nav>
+                    <Jumbotron className={ cx(Styles.ControlPanelStyles) } hidden={!(this.state.activeTab === "timer")} fluid>
                         <Container>
                             {(() => {
-                                console.log("test");
 
                                 if (this.props.currentTask._id) {
                                     // console.log(this.props.currentTask);
-                                    
                                     return (
                                         <>
                                             <small className={ cx("text-muted") }><i>Time Left</i></small>
-                                            <h4>{`${time_target.getHours()}h ${time_target.getMinutes()}m ${time_target.getSeconds()}s`}</h4>
+                                            {/* <h4>{`${time_target.getHours()}h ${time_target.getMinutes()}m ${time_target.getSeconds()}s`}</h4> */}
+                                            <h4>{(`${Math.floor(this.state.time/3600)}h ${Math.floor((this.state.time%3600)/60)}m ${this.state.time%60}s`)}</h4>
                                             <br/>
-                                            <Button id="toggleCountdownBtn" className={ cx(Styles.ButtonStyles) } variant={this.state.toggleCoundownButtonVariant} onClick={this.toggleCountdown} size="sm">{this.state.toggleCoundownButtonContent}</Button>
-                                            <Button className={ cx(Styles.ButtonStyles) }variant="primary" onClick={(event) => {
-                                                this.setState({counting: false}, () => {
-                                                    // console.log(`Counting: ${this.state.counting}`);
-                                                    this.props.markAsDone(event, this.props);
-                                                });
-                                                }} size="sm">Mark as Done</Button>
+                                            <ButtonGroup>
+                                                <Button className={ cx( ) } variant="primary" style={{ "width" : "6vw" }} size="lg" onClick={() => {
+                                                    if (this.state.time - 300 > 0) {
+                                                        this.setState({time: this.state.time - 300, initialTime: this.state.time - 300}, () => {this.props.updateTime(this.state.time)});
+                                                    }
+                                                }}>
+                                                    <FontAwesomeIcon icon={faMinus}></FontAwesomeIcon>
+                                                </Button>
+                                                <Button 
+                                                    
+                                                    className={ cx( Styles.ButtonStyles ) }
+                                                    style={{"marginRight": "0px", "width": "15vw"}} 
+                                                    variant={this.state.toggleCountdownButtonVariant} 
+                                                    onClick={this.toggleCountdown} 
+                                                    size="lg">
+                                                        {this.state.toggleCountdownButtonContent}
+                                                </Button>
+                                                <Button className={ cx( ) } variant="primary" style={{ "width" : "6vw" }} size="lg" onClick={() => {
+                                                    if(this.state.time + 300 < 10800) {
+                                                        this.setState({time: this.state.time + 300, initialTime: this.state.time + 300}, () => {this.props.updateTime(this.state.time)});
+                                                    }
+                                                }}>
+                                                    <FontAwesomeIcon icon={faPlus}></FontAwesomeIcon>
+                                                </Button>
+                                            </ButtonGroup>
                                         </>
                                     )
                                 } else if (this.props.userIsLoggedIn) {
                                     return (
                                         <h4 className={ cx("text-muted") }>
-                                            <i>Click the red button to add a task!</i>
+                                            <i><div style={{"paddingTop": "7vh"}}>Click the red button to add a task!</div></i>
                                         </h4>
                                     )
                                 } else {
                                     return (
                                         <h4 className={ cx("text-muted") }>
-                                            <i>Login to start adding tasks!</i>
+                                            <i><div style={{"paddingTop": "7vh"}}>Login to start adding tasks!</div></i>
                                         </h4>
                                     )
                                 }
@@ -133,6 +226,42 @@ class ConureDetailWindow extends Component {
                         </Container>
                     </Jumbotron>
                 </Container>
+                {/*
+                <div 
+                    id="taskDescriptionField#"
+                    className={ cx(Styles.EditorStyles) } 
+                    contentEditable={true} 
+                    placeholder="Crack some eggs..." 
+                    hidden={!(this.state.activeTab === "editor")}>
+                {description}
+                </div>
+                */}
+                <div id="taskDescriptionField" className={ cx(Styles.EditorStyles) } hidden={!(this.state.activeTab === "editor")}>
+                    <Container>
+                        <CKEditor
+                            editor={ClassicEditor}
+                            data={description}
+                            onChange={(event, editor) => {
+                                const data = editor.getData();
+                                this.props.updateTaskDescription(event, data);
+                                console.log(data);
+                            }}
+                            disabled={this.props.currentTask._id ? false : true}
+                        />
+                    </Container>
+                </div>
+                <Modal show={this.state.showSettingsModal} onHide={this.closeSettingsModal}>
+                    <Modal.Header closeButton>
+                        <i className="fas fa-cog"></i>
+                        <Modal.Title className={ cx(Styles.ModalHeaderStyles) }>Settings</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <Button className={ cx(Styles.ResetBtnStyles, "shadow") } variant="danger" size="sm" onClick={this.props.resetXP}>
+                            <FontAwesomeIcon icon={faBackward} size="sm"/>
+                            &nbsp;&nbsp;Reset XP
+                        </Button>
+                    </Modal.Body>
+                </Modal>
             </div>
         )
     }

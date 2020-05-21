@@ -3,25 +3,31 @@ import { css } from "emotion";
 const Styles = {
     NavbarStyle: css `
         border-bottom: 1px solid lightgrey;
-        font-family: 'Oxygen', sans-serif;
+        font-family: 'Jost', sans-serif;
         font-weight: bold;
         width: 100%;
+        height: 6vh;
+        z-index: 1000;
+    `,
+    PageTitleStyle: css `
+        position: absolute;
     `,
     LogoStyle: css `
         width: 8%;
         margin-right: 4%;
     `,
     userKeyStyle: css `
-        font-family: 'Goudy Bookletter 1911', serif;
-        font-weight: bold;
+        font-family: 'Cabin Sketch', sans-serif;
         position: absolute;
+        font-weight: 700;
         left: 50%;
         transform: translate(-50%,0);
         transition: all 0.5s;
+        font-size: 1.4em;
 
         &:hover {
             color: grey;
-            font-size: 1.1em;
+            font-size: 1.5em;
             cursor: pointer;
         }
     `,
@@ -55,6 +61,16 @@ const Styles = {
     BgRed: css `
         background-color: rgba(255, 0, 0, 0.5);
     `,
+    ModalStyles: css `
+        font-family: "Jost", sans-serif;
+    `,
+    ModalHeaderStyles: css `
+        background-color: red;
+    `,
+    ModalHeaderStyles: css `
+        text-align: center;
+        width: 100%;
+    `,
     LoginLinkWrapperStyle: css `
         text-decoration: none !important;
 
@@ -64,15 +80,25 @@ const Styles = {
     `,
     LoginLinkStyle: css `
         margin-left: 5vw;
-        font-family: 'Goudy Bookletter 1911', serif;
+        font-family: 'Jost', sans-serif;
         font-weight: bold;
         transition: all 0.5s;
+        position: relative;
+        bottom: 0.1vh;
 
         &:hover {
             color: red;
             font-size: 1.1em;
         }
     `,
+    CopyToClipboardStyles: css `
+        color: inherit;
+
+        &:hover {
+            color: inherit;
+            text-decoration: none;
+        }
+    `
 }
 
 export default Styles;

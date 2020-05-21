@@ -22,9 +22,6 @@ class ConureQuoteWindow extends Component {
 
         const quotesElements = quotes.map(elem => (
             <Carousel.Item>
-                <h6 className={ cx("text-muted") }>
-                    <small><i>Quote</i></small>
-                </h6>
                 <Container>
                     <blockquote cite="Author">
                         <p className={ cx(Styles.QuoteBody) }>{elem[0]}</p>
@@ -40,7 +37,10 @@ class ConureQuoteWindow extends Component {
 
         return (
             <div id={this.props.id} className={ cx(Styles.QuoteWindowWrapper) }>
-                <Carousel>
+                <h6 className={ cx("text-muted") }>
+                    <small><i>Quote</i></small>
+                </h6>
+                <Carousel controls={false} indicators={false} slide={true}>
                     {quotesElements}
                 </Carousel>
             </div>
