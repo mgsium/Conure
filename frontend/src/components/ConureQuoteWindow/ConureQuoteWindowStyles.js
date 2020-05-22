@@ -27,6 +27,13 @@ const Styles = {
     `,
     QuoteFooter: css `
 
+    `,
+    CopyrightStyles: css `
+        position: absolute;
+        bottom: 5vh;
+        font-size: 3mm;
+        width: 95%;
+        text-align: center;
     `
 }
 
