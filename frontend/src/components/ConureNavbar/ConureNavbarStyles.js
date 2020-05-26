@@ -6,7 +6,9 @@ const Styles = {
         font-family: 'Jost', sans-serif;
         font-weight: bold;
         width: 100%;
-        height: 6vh;
+        height: calc(10vh - 2vw);
+        min-height: 6.2vh;
+        max-height: 7.0vh;
         z-index: 1000;
     `,
     PageTitleStyle: css `

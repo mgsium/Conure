@@ -29,10 +29,38 @@ const Styles = {
         word-wrap: break-word;
         overflow-wrap: break-word;
         -webkit-line-break: after-white-space;
+
+        transition: all 0.5s;
+
         &:hover {
             cursor: pointer;
-            background: whitesmoke;
+            background: rgba(0,0,0,0.05);
+            font-size: 0.9em;
+            border-left: 0.5vw solid red;
         }
+
+        &:active {
+            background: rgba(0, 123, 255, 0.1);
+        }
+    `,
+    ActiveTaskStyle: css `
+        width: 39.4vw;
+        font-family: "Jost", sans-serif;
+        font-weight: bold;
+        font-size: 4mm;
+        max-width: 39.9vw;
+        min-height: 50px;
+
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        -webkit-line-break: after-white-space;
+
+        transition: all 0.5s;
+
+        cursor: pointer;
+        background: rgba(0,0,0,0.05);
+        font-size: 0.9em;
+        border-left: 5px solid red;
     `,
     TaskWrapperStyle: css `
         width: 100%;

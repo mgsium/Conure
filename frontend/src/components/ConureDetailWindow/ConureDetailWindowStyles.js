@@ -22,7 +22,6 @@ const Styles = {
         border-top-right-radius: 5px;
         border-top-left-radius: 5px;
         transition: all 0.5s;
-        margin-bottom: 8px;
 
         font-family: 'Jost', sans-serif;
         font-size: 7mm;
@@ -76,14 +75,23 @@ const Styles = {
         position: relative;
         top: -5vh;
     `,
+    ToolbarButtonStyles: css `
+        display: inline-block;
+        float:right;
+        position: relative;
+        top: -5vh;
+        margin-bottom: 0px;
+        font-size: 0.8em;
+    `,
     DoneButtonStyles: css `
         right: 2vw;
     `,
     DeleteButtonStyles: css `
         right: 1vw;
     `,
-    SettingsButtonStyles: css `
-
+    SettingsModalHeaderStyles: css `
+        text-align: center;
+        width: 100%;
     `,
     ResetBtnStyles: css `
         color: white;
@@ -91,6 +99,7 @@ const Styles = {
     `,
     EditorStyles: css `
         min-height: 26vh;
+        margin-bottom: 1.75vh;
     `
 }
 

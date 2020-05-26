@@ -36,10 +36,33 @@ class App extends Component {
                 target: 0
             },
             counting: false,
-            taskRenderComplete: true
+            taskRenderComplete: true,
+            defaultXP: 100
         };
 
         this.userIsLoggedIn = true;
+
+        // Loading Screen Messages
+        const loadingScreenMessages = [
+            "640K ought to be enough for anybody",
+            "The architects are still drafting...",
+            "The bits are breeding...",
+            "Would you prefer chicken, steak, or tofu?",
+            "A few bits tried to escape, but we caught them...",
+            "Checking the gravitational constant in your locale...",
+            "At least you're not on hold...",
+            "Hum something loud while others stare...",
+            "You're not in Kansas any more...",
+            "The server is powered by a lemon and two electrodes...",
+            "While a larger software vendor in Seattle takes over the world...",
+            "We're testing your patience...",
+            "Don't think of purple hippos...",
+            "While the satellite moves into position...",
+            "The bits are flowing slowly today...",
+            "Warming up the Large Hadron Collider..."
+        ];
+
+        this.loadingScreenMessage = loadingScreenMessages[Math.floor(Math.random() * loadingScreenMessages.length)];
 
         // Level Information
         this.levelImages = [eggs, chicklet, pigeon, flamingo, pelican, bluebird, puffin, conure_light];
@@ -360,7 +383,7 @@ class App extends Component {
             "description": ""
         })
 
-        console.log(body);
+        // console.log(body); // DEBUG
 
         fetch(URL, {
             headers: {
@@ -401,7 +424,7 @@ class App extends Component {
 
     // Mark as Done
     markAsDone(event, taskInfo) {
-        this.addXP(event, 100);
+        this.addXP(event, this.state.defaultXP);
 
         // Remove Task Below
         const ID = taskInfo.currentTask._id;
@@ -453,7 +476,7 @@ class App extends Component {
                             color = "#686769"
                             loading = {true}
                         />
-                        <em>Changing the world...</em>
+                        <em>{this.loadingScreenMessage}</em>
                     </div>
                 </div>
 

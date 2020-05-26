@@ -129,11 +129,12 @@ class ConureDetailWindow extends Component {
         return (
             <div id={this.props.id} className={ cx( Styles.DetailWindowWrapperStyle ) }>
                 <Container fluid>
-                    <p>In Detail</p>
-                    <Button className={ cx( Styles.CircleButtonStyles, Styles.SettingsButtonStyles ) } variant="secondary" onClick={this.openSettingsModal}>
+                    <p style={{"position": "relative", "top": "0.75vh"}}>In Detail</p>
+                    <Button className={ cx( Styles.ToolbarButtonStyles, Styles.SettingsButtonStyles ) } variant="outline-secondary" onClick={this.openSettingsModal} size="sm">
                         <FontAwesomeIcon icon={faTools}></FontAwesomeIcon>
+                        &nbsp;&nbsp;Settings
                     </Button>
-                    <Button type="button" variant="danger" className={ cx( Styles.CircleButtonStyles, Styles.DeleteButtonStyles ) } onClick={(event) => {
+                    <Button type="button" variant="outline-danger" size="sm" className={ cx( Styles.ToolbarButtonStyles, Styles.DeleteButtonStyles ) } onClick={(event) => {
                                                     if (this.props.currentTask._id) {
                                                         this.setState({counting: false}, () => {
                                                             this.props.removeTask(event, this.props.currentTask._id);
@@ -141,8 +142,9 @@ class ConureDetailWindow extends Component {
                                                     }
                                                 }}>
                         <FontAwesomeIcon icon={faDumpster}></FontAwesomeIcon>
+                        &nbsp;&nbsp;Delete Task
                     </Button>
-                    <Button className={ cx( Styles.CircleButtonStyles, Styles.DoneButtonStyles ) } variant="success" onClick={(event) => {
+                    <Button className={ cx( Styles.ToolbarButtonStyles, Styles.DoneButtonStyles ) } variant="outline-success" size="sm" onClick={(event) => {
                                                     if (this.props.currentTask._id) {
                                                         this.setState({counting: false}, () => {
                                                             this.props.markAsDone(event, this.props);
@@ -150,15 +152,16 @@ class ConureDetailWindow extends Component {
                                                     }
                                                 }}>
                         <FontAwesomeIcon icon={faCheck}></FontAwesomeIcon>
+                        &nbsp;&nbsp;Done
                     </Button>
                     <hr/>
                     <div id={"taskBodyField"}
-                        contentEditable={true} 
+                        contentEditable={this.props.currentTask._id ? true : false} 
                         suppressContentEditableWarning={true}
                         spellCheck={false} 
                         className={ cx(Styles.TaskBodyStyle) } 
                         onChange={this.disableEnter}
-                        placeholder={"Type Here..."}
+                        placeholder={this.props.currentTask._id ? "Type Here..." : (this.props.userIsLoggedIn ? "Add a Task" : "Create an Account")}
                     >{body}</div>
                     <br/>
                     <hr/>
@@ -252,8 +255,7 @@ class ConureDetailWindow extends Component {
                 </div>
                 <Modal show={this.state.showSettingsModal} onHide={this.closeSettingsModal}>
                     <Modal.Header closeButton>
-                        <i className="fas fa-cog"></i>
-                        <Modal.Title className={ cx(Styles.ModalHeaderStyles) }>Settings</Modal.Title>
+                        <Modal.Title className={ cx(Styles.SettingsModalHeaderStyles) }>Settings</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <Button className={ cx(Styles.ResetBtnStyles, "shadow") } variant="danger" size="sm" onClick={this.props.resetXP}>

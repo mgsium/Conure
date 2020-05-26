@@ -37,6 +37,7 @@ const Styles = {
     NavbarTextStyles: css `
         position: absolute;
         bottom: 3px;
+        font-family: "Jost", sans-serif;
     `
 }
 

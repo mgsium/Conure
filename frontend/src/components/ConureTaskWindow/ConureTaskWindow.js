@@ -49,6 +49,7 @@ class ConureTaskWindow extends Component {
             )
         }
         */
+       
 
         return (
             <div id={this.props.id} className={ cx( Styles.TaskWindowWrapperStyle ) }>
@@ -62,7 +63,10 @@ class ConureTaskWindow extends Component {
                         {
                             this.props.tasks.map( (task, index) => 
                             <div id={task._id} key={task._id} className={ cx(Styles.TaskWrapperStyle) }>
-                                <ListGroup.Item key={task._id} id={task._id} className={ cx(Styles.TaskStyle) } onClick={this.props.showDetail}>
+                                <ListGroup.Item key={task._id} id={task._id} className={ cx((this.state.activeTaskId == task._id ? Styles.ActiveTaskStyle : Styles.TaskStyle)) } onClick={event => {
+                                    this.props.showDetail(event);
+                                    this.setState({activeTaskId: task._id});
+                                }}>
                                     {task.body}
                                     <i className={ cx("fas", "fa-times", "fa-lg", Styles.DeleteIconStyle) }></i>
                                 </ListGroup.Item>
@@ -71,7 +75,7 @@ class ConureTaskWindow extends Component {
                         }
                         {
                             this.props.userIsLoggedIn  ?  (
-                                    <ListGroup.Item className={ cx( Styles.AddTaskBtnStyle ) } onClick={ () => {this.setState({
+                                    <ListGroup.Item className={ cx( Styles.AddTaskBtnStyle) } onClick={ () => {this.setState({
                                         addTaskBtnText: false}); this.props.addTask(); setTimeout(() => {this.updateTaskBtn(this);}, 100)}} variant="danger" disabled={!this.state.addTaskBtnText}>
                                         {this.state.addTaskBtnText ? "Add Task +" : <Spinner animation="border" variant="danger" size="sm"/>} 
                                     </ListGroup.Item>
