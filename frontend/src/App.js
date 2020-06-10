@@ -106,6 +106,7 @@ class App extends Component {
             console.log("Data fetched.")
             console.log(data.user_info);
             console.log(data.tasks);
+            data.tasks.sort(function(a,b) {return (Buffer.from(a.indexBase64, "base64").toString("utf8") > Buffer.from(b.indexBase64, "base64").toString("utf8")) ? 1 : ((Buffer.from(b.indexBase64, "base64").toString("utf8") > Buffer.from(a.indexBase64, "base64").toString("utf8")) ? -1 : 0);});
             this.setState({user: data.user_info, tasks: data.tasks}, () => {
                 this.setState({taskRenderComplete: true});
             });
@@ -115,7 +116,7 @@ class App extends Component {
         })
         .then(() => {
             // Turning off the loading screen
-            console.log($("#LoadingScreen"))
+            console.log($("#LoadingScreen"));
             $("#LoadingScreen").fadeOut();
         })
         .catch(error => {
@@ -126,7 +127,7 @@ class App extends Component {
 
     autosetDetailWindow() {
         try {
-            const targetID = this.state.tasks[0]._id;
+            const targetID = this.state.tasks[this.state.tasks.length-1]._id;
             document.getElementById(targetID).childNodes[0].click();
         } catch ( error ) {
             this.setState({ currentTask: {
@@ -376,6 +377,7 @@ class App extends Component {
         this.setState({taskRenderComplete: false});
 
         const URL = `${this.props.backendUrl}/createTask`;
+        console.log(this.state);
         const body = JSON.stringify({
             "id": this.state.user.key,
             "body": "",
@@ -396,7 +398,6 @@ class App extends Component {
             console.log("Created New Task.");
             this.getUserData();
         })
-
     }
 
     // Login

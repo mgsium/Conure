@@ -9,6 +9,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCopyright } from "@fortawesome/free-regular-svg-icons";
 import { faGithubAlt } from "@fortawesome/free-brands-svg-icons";
 
+import $ from "jquery";
+
 
 class ConureQuoteWindow extends Component {
     constructor(props) {
@@ -18,17 +20,36 @@ class ConureQuoteWindow extends Component {
             quotes: []
         };
 
-        fetch("https://type.fit/api/quotes")
+
+        fetch("https://conure-backend.herokuapp.com/quotes")
         .then(response => {
             return response.json();
         })
         .then(data => {
             let q = [];
             for (let i=0;i < 10; i++) {
-                q.push(data[Math.floor(Math.random()*data.length)]);
+                q.push(data.quotes[Math.floor(Math.random()*data.quotes.length)]);
             }
             this.setState({quotes: q});
         })
+
+        /*
+        const settings = {
+            "async": true,
+            "crossDomain": true,
+            "url": "https://type.fit/api/quotes",
+            "method": "GET"
+        }
+
+        $.ajax(settings).done(function (response) {
+            const data = JSON.parse(response);
+            let q = [];
+            for (let i=0;i < 10; i++) {
+                q.push(data[Math.floor(Math.random()*data.length)]);
+            }
+            this.setState({quotes: q});
+        });
+        */
     }
 
     render() {   

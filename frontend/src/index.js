@@ -10,7 +10,9 @@ WebFont.load({
     }
 })
 
-ReactDOM.render(<App backendUrl="https://conure-backend.herokuapp.com"/>, document.getElementById("app"));
+ReactDOM.render(<App backendUrl="http://localhost:3501"/>, document.getElementById("app"));
+
+// https://conure-backend.herokuapp.com
 
 /*
 process.on('SIGINT', function() {

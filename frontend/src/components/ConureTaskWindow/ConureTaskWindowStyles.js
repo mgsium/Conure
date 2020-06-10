@@ -9,8 +9,22 @@ const Styles = {
         height: 90%;
         width: 40vw;
         border-right: 1px solid gainsboro;
-
+        overflow-y: hidden;
+        direction: rtl;
         padding: 0px;
+
+        &::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background-color: lightgrey;
+            border-radius: 5px;
+        }
+
+        &:hover {
+            overflow-y: auto;
+        }
     `,
     TaskListStyle: css `
         width: 100%;
@@ -73,6 +87,7 @@ const Styles = {
         font-weight: bold;
         font-family: "Jost", sans-serif;
         transition: all 0.2s;
+        margin-bottom: 50px;
 
         &:hover {
             cursor: pointer;

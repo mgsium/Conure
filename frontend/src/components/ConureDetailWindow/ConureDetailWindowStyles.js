@@ -12,6 +12,16 @@ const Styles = {
         padding: 15px;
         font-family: "Jost", sans-sans-serif;
         font-weight: bold;
+
+        &::-webkit-scrollbar {
+            width: 10px;
+            z-index: 1001;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background-color: lightgrey;
+            border-radius: 5px;
+        }
     `,
     TaskBodyStyle: css`
         outline: 0;

@@ -55,6 +55,7 @@
     "react-scripts": "^3.3.0",
     "react-spinners-kit": "^1.9.1",
     "serve": "^11.2.0",
+    "simple-scrollbar": "^0.4.0",
     "typescript": "^3.8.3",
     "webfontloader": "^1.6.28"
   },

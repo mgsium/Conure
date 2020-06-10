@@ -5,7 +5,8 @@ const mongoose = require("mongoose");
 const userInfoSchema = new mongoose.Schema({
     key: String,
     username: String,
-    xp: Number
+    xp: Number,
+    taskCount: Number
 });
 
 // Module Exports

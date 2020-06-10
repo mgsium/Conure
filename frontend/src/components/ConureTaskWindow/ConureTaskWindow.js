@@ -9,6 +9,8 @@ import Styles from "./ConureTaskWindowStyles.js";
 
 import $ from "jquery";
 
+import SimpleScrollbar from 'simple-scrollbar';
+
 class ConureTaskWindow extends Component {
     constructor(props) {
         super(props);
@@ -23,6 +25,13 @@ class ConureTaskWindow extends Component {
         } else {
             this.setState({addTaskBtnText: true});
         }
+    }
+
+    // On Task Addition
+    onTaskAddition() {
+        try {
+            $(`#${this.props.tasks[this.props.tasks.length-1]._id} > div`).click();
+        } catch {}
     }
 
     render() {
