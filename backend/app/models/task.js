@@ -6,7 +6,8 @@ const taskSchema = mongoose.Schema({
     body: String,
     target: Number,
     description: String,
-    indexBase64: String
+    indexBase64: String,
+    parentFolderId: String
 })
 
 // Module Exports

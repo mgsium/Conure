@@ -15,8 +15,18 @@ const Styles = {
         position: absolute;
     `,
     LogoStyle: css `
-        width: 8%;
-        margin-right: 4%;
+        width: 25px;
+        margin-right: 10px;
+    `,
+    LogoAnchorStyle: css `
+        position: relative;
+        bottom: 2.8vh;
+    `,
+    LogoTextStyles: css `
+        display: none;
+        @media(min-width: 900px) {
+            display: inline;
+        }
     `,
     userKeyStyle: css `
         font-family: 'Cabin Sketch', sans-serif;
@@ -91,6 +101,15 @@ const Styles = {
         &:hover {
             color: red;
             font-size: 1.1em;
+        }
+    `,
+    LoginText: css `
+        display: none;
+        margin-right: 5px;
+        position: relative;
+        bottom: 1px;
+        @media(min-width: 900px) {
+            display: inline;
         }
     `,
     CopyToClipboardStyles: css `

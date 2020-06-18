@@ -31,13 +31,18 @@ class App extends Component {
         this.state = {
             user: {},
             tasks: [],
+            folders: [],
             newPoints: 0,
             currentTask: {
                 target: 0
             },
             counting: false,
             taskRenderComplete: true,
-            defaultXP: 100
+            defaultXP: 100,
+            currentFolder: {
+                _id: ""
+            },
+            folderIsActive: true
         };
 
         this.userIsLoggedIn = true;
@@ -76,7 +81,14 @@ class App extends Component {
         this.updateTime = this.updateTime.bind(this);
         this.removeTask = this.removeTask.bind(this);
         this.addTask = this.addTask.bind(this);
+        this.addFolder = this.addFolder.bind(this);
+        this.renameFolder = this.renameFolder.bind(this);
+        this.removeFolder = this.removeFolder.bind(this);
         this.updateTask = this.updateTask.bind(this);
+        this.updateUsername = this.updateUsername.bind(this);
+        this.completeTask = this.completeTask.bind(this);
+        this.openFolder = this.openFolder.bind(this);
+        this.setCurrentFolder = this.setCurrentFolder.bind(this);
         this.updateTaskDescription = this.updateTaskDescription.bind(this);
         this.autosetDetailWindow = this.autosetDetailWindow.bind(this);
         this.Login = this.Login.bind(this);
@@ -84,6 +96,7 @@ class App extends Component {
         this.markAsDone = this.markAsDone.bind(this);
         this.addXP = this.addXP.bind(this);
         this.resetXP = this.resetXP.bind(this);
+        this.changeDefaultPointsScore = this.changeDefaultPointsScore.bind(this);
     }
 
     // Get User Data
@@ -106,8 +119,9 @@ class App extends Component {
             console.log("Data fetched.")
             console.log(data.user_info);
             console.log(data.tasks);
+            console.log(data.folders);
             data.tasks.sort(function(a,b) {return (Buffer.from(a.indexBase64, "base64").toString("utf8") > Buffer.from(b.indexBase64, "base64").toString("utf8")) ? 1 : ((Buffer.from(b.indexBase64, "base64").toString("utf8") > Buffer.from(a.indexBase64, "base64").toString("utf8")) ? -1 : 0);});
-            this.setState({user: data.user_info, tasks: data.tasks}, () => {
+            this.setState({user: data.user_info, tasks: data.tasks, folders: data.folders}, () => {
                 this.setState({taskRenderComplete: true});
             });
         })
@@ -127,35 +141,44 @@ class App extends Component {
 
     autosetDetailWindow() {
         try {
-            const targetID = this.state.tasks[this.state.tasks.length-1]._id;
+            console.log(this.state.currentFolder);
+            console.log(this.state.tasks.filter(task => typeof task.parentFolderId != "undefined" ? true : false));
+            const targetID = this.state.tasks.filter(task => typeof task.parentFolderId != "undefined" ? (task.parentFolderId == this.state.currentFolder._id ? true :  false) : false )[0]._id;
+            console.log(targetID);
             document.getElementById(targetID).childNodes[0].click();
         } catch ( error ) {
             this.setState({ currentTask: {
                 body: "",
                 target: 0,
-                description: ""
+                description: "",
+                parentFolderId: {_id: this.state.currentFolder._id}
             }})
         }
     }
 
     // Show Detail
     showDetail(event) {
-        // Get the ID of the Target Task Element & Task List
-        let targetID = event.target.parentNode.id;
-        const tasks = this.state.tasks;
+        try {
+            // Get the ID of the Target Task Element & Task List
+            let targetID = event.target.parentNode.id ? event.target.parentNode.id : event.target.parentNode.parentNode.id;
+            const tasks = this.state.tasks;
 
-        // Call removeTask if the cross has been selected
-        if ( !targetID ) {
-            this.removeTask(event);
-            return;
+
+            // Call removeTask if the cross has been selected
+            if ( !targetID ) {
+                this.removeTask(event);
+                return;
+            }
+
+            // Extract the Target task from the task list
+            let currentTask = {};
+            tasks.forEach( task => { if ( task._id == targetID ) currentTask = task });
+
+            // Set the new current task in state.
+            this.setState({ currentTask: currentTask, folderIsActive: false });
+        } catch (error) {
+            console.log(error);
         }
-
-        // Extract the Target task from the task list
-        let currentTask = {};
-        tasks.forEach( task => { if ( task._id == targetID ) currentTask = task });
-
-        // Set the new current task in state.
-        this.setState({ currentTask: currentTask });
     }
 
     /*
@@ -238,8 +261,11 @@ class App extends Component {
             const URL = `${this.props.backendUrl}/updateUserInfo`;
             const body = JSON.stringify({
                 user: this.state.user,
-                tasks: this.state.tasks
+                tasks: this.state.tasks,
+                folders: this.state.folders
             })
+
+            console.log(body);
 
             // console.log(this.state.tasks);
 
@@ -274,6 +300,39 @@ class App extends Component {
         document.execCommand('selectAll', false, null);
         const selection = document.getSelection();
         selection.collapseToEnd(); */
+    }
+
+    // Update Username
+    updateUsername(event, username) {
+        // Return if username is invalid
+        if (!username) {
+            return;
+        }
+
+        // Modify the user object
+        let user = this.state.user;
+        user.username = username;
+
+        // Save new object to state
+        this.setState({user: user}, () => {
+            const URL = `${this.props.backendUrl}/updateUserInfo`;
+            const body = JSON.stringify({
+                user: this.state.user,
+                tasks: this.state.tasks,
+                folders: this.state.folders
+            })
+
+            fetch(URL, {
+                headers: {"Content-Type": "application/json"},
+                method: "PUT",
+                body: body
+            })
+            // .then(res => res.json())
+            // .then(data => console.log(data))
+            .catch(err => {
+                console.log(`An Error Occured: ${err.message}`);
+            })
+        });
     }
 
     updateTaskDescription(event, description) {
@@ -319,7 +378,8 @@ class App extends Component {
         const URL = `${this.props.backendUrl}/updateUserInfo`;
         const body = JSON.stringify({
             user: this.state.user,
-            tasks: this.state.tasks
+            tasks: this.state.tasks,
+            folders: this.state.folders
         })
 
         fetch(URL, {
@@ -351,10 +411,10 @@ class App extends Component {
                 "id": this.state.user.key,
                 "taskId": targetID
             });
+
+            // Make Request
             fetch(URL, {
-                headers: {
-                    "Content-type": "application/json"
-                },
+                headers: {"Content-type": "application/json"},
                 method: "PUT",
                 body: body
             })
@@ -363,7 +423,7 @@ class App extends Component {
             let tasks = this.state.tasks;
 
             // Filter out the target task
-            tasks = tasks.filter(task => { return task._id != targetID });
+            tasks = tasks.filter(task => task._id != targetID );
 
             // Set the task list to the remaining tasks
             this.setState({tasks: tasks}, () => {
@@ -372,20 +432,52 @@ class App extends Component {
         } catch (TypeError) {};
     }
 
+    // Remove Folder
+    removeFolder(event, ID) {
+        // Set request URL
+        const URL = `${this.props.backendUrl}/removeFolder`;
+
+        // Set request body
+        const body = JSON.stringify({
+            "id": this.state.user.key,
+            "folderId": ID
+        });
+
+        // Make Request
+        fetch(URL, {
+            headers: {"Content-type": "application/json"},
+            method: "DELETE",
+            body: body
+        })
+
+        // Get Current Folder & Task Lists
+        let folders = this.state.folders;
+        let tasks = this.state.tasks;
+
+        // Filter out the target folder & tasks
+        folders = folders.filter(folder => folder._id != ID);
+        tasks = tasks.filter(task => task.parentFolderId != ID);
+
+        // Set new filtered lists to state;
+        this.setState({folders: folders, task: tasks});
+    }
+
     // addTask
-    addTask(event) {
+    addTask(event, text) {
         this.setState({taskRenderComplete: false});
 
         const URL = `${this.props.backendUrl}/createTask`;
-        console.log(this.state);
+
         const body = JSON.stringify({
             "id": this.state.user.key,
-            "body": "",
+            "body": text,
             "target": 3600,
-            "description": ""
+            "description": "",
+            "parentFolderId": this.state.currentFolder._id
         })
 
-        // console.log(body); // DEBUG
+        console.log(body);
+        console.log(text);
 
         fetch(URL, {
             headers: {
@@ -397,6 +489,48 @@ class App extends Component {
         .then( response => {
             console.log("Created New Task.");
             this.getUserData();
+        })
+    }
+
+    // addFolder
+    addFolder(event, folderName) {
+        this.setState({taskRenderComplete: false});
+
+        // Specify request info
+        const URL =`${this.props.backendUrl}/createFolder`;
+        const body = JSON.stringify({
+            "id": this.state.user.key,
+            "name": folderName,
+            "parentFolderId": this.state.currentFolder._id
+        })
+
+        // Make request
+        fetch(URL, {
+            headers: { "Content-type": "application/json"},
+            method: "PUT",
+            body: body
+        })
+        .then( response => {
+            console.log("Created New Folder.");
+            this.getUserData();
+        })
+        .catch( err => {
+            console.log("An Error Occured.");
+        })
+    }
+
+    // Rename Folder
+    renameFolder(event, folderName) {
+        // Ammending folder object
+        let folders = this.state.folders;
+        let currentFolder = this.state.folders.find(folder => folder._id == this.state.currentFolder._id);
+        const index = folders.indexOf(currentFolder);
+        currentFolder.name = folderName;
+        folders[index] = currentFolder;
+
+        // Saving new object to state
+        this.setState({currentFolder: currentFolder, folders: folders}, () => {
+            this.updateUserInfo();
         })
     }
 
@@ -423,6 +557,20 @@ class App extends Component {
         })
     }
 
+    // Open Folder
+    openFolder(event) {
+        this.setState({
+            currentFolder: this.state.folders.filter(folder => folder._id === event.target.parentNode.id)[0],
+            folderIsActive: true
+        });
+    }
+
+    // Set Current Folder
+    setCurrentFolder(currentFolderId) {
+        const newFolder = this.state.folders.filter(folder => folder._id == currentFolderId._id)[0];
+        this.setState({currentFolder: (newFolder ? newFolder : {_id: ""})});
+    }
+
     // Mark as Done
     markAsDone(event, taskInfo) {
         this.addXP(event, this.state.defaultXP);
@@ -430,7 +578,33 @@ class App extends Component {
         // Remove Task Below
         const ID = taskInfo.currentTask._id;
         this.removeTask(event, ID);
+    }
 
+    // Complete Task
+    completeTask(taskId) {
+        this.addXP(null, this.state.user.taskCompletionPoints);
+
+        // Remove Task Below
+        let tasks = this.state.tasks;
+        tasks = tasks.filter( task => task._id != taskId );
+        this.setState({tasks: tasks}, () => {
+            const URL = `${this.props.backendUrl}/removeTask`;
+            // console.log(this.state.user.key, targetID);
+            const body = JSON.stringify({
+                "id": this.state.user.key,
+                "taskId": taskId
+            });
+
+            // Make Request
+            fetch(URL, {
+                headers: {"Content-type": "application/json"},
+                method: "PUT",
+                body: body
+            })
+
+            this.autosetDetailWindow();
+            
+        })
     }
 
     // Add XP
@@ -453,6 +627,15 @@ class App extends Component {
         this.setState({user: user}, () => {
             this.updateUserInfo();
         })
+    }
+
+    // Change Default Points Score
+    changeDefaultPointsScore(newTaskCompletionPoints) {
+        let user = this.state.user;
+        user.taskCompletionPoints = newTaskCompletionPoints;
+        this.setState({user: user}, () => {
+            this.updateUserInfo();
+        });
     }
 
     // Component Will Mount
@@ -493,22 +676,37 @@ class App extends Component {
                 <ConureTaskWindow 
                     id="ConureTaskWindow" 
                     tasks={this.state.tasks} 
-                    removeTask={this.removeTask} 
+                    folders={this.state.folders}
+                    removeTask={this.removeTask}
+                    completeTask={this.completeTask} 
                     addTask={this.addTask} 
+                    addFolder={this.addFolder}
+                    renameFolder={this.renameFolder}
+                    removeFolder={this.removeFolder}
+                    setCurrentFolder={this.setCurrentFolder}
+                    currentFolder={this.state.currentFolder}
                     showDetail={this.showDetail}
+                    openFolder={this.openFolder}
                     userIsLoggedIn={this.userIsLoggedIn}
                     taskRenderComplete={this.state.taskRenderComplete}
                 />
                 <ConureDetailWindow 
-                    id="ConureDetailWindow"    
+                    id="ConureDetailWindow"  
+                    userName={this.state.user.username}  
                     currentTask={this.state.currentTask} 
+                    tasks={this.state.tasks}
                     updateTask={this.updateTask}
+                    updateUsername={this.updateUsername}
                     updateTaskDescription={this.updateTaskDescription}
+                    currentFolder={this.state.currentFolder}
+                    folderIsActive={this.state.folderIsActive}
                     markAsDone={this.markAsDone}
                     removeTask={this.removeTask}
                     updateTime={this.updateTime}
                     userIsLoggedIn={this.userIsLoggedIn}
                     resetXP={this.resetXP}
+                    taskCompletionPoints={this.state.user.taskCompletionPoints}
+                    changeDefaultPointsScore={this.changeDefaultPointsScore}
                 />
                 <ConureQuoteWindow
                     id="ConureQuoteWindow"

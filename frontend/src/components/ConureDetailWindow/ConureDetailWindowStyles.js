@@ -103,9 +103,39 @@ const Styles = {
         text-align: center;
         width: 100%;
     `,
+    AccountNameContentEditableStyles: css `
+        outline: 0;
+        display: inline-block;
+        border-bottom: 1px solid gainsboro;
+        background-color: #f3f3f3;
+        padding: 10px; 
+        border-top-right-radius: 5px;
+        border-top-left-radius: 5px;
+        transition: all 0.5s;
+        margin-bottom: 10px;
+
+        font-family: 'Jost', sans-serif;
+        font-size: 5mm;
+        font-weight: normal;
+
+        max-width: 100%;
+
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        -webkit-line-break: after-white-space;
+
+        &:hover {
+            border-bottom: 1px solid black;
+        }
+
+        &[placeholder]:empty::before {
+            content: attr(placeholder);
+            color: lightgrey;
+            font-weight: 100;
+        }
+    `,
     ResetBtnStyles: css `
-        color: white;
-        margin-left: 40%;
+        
     `,
     EditorStyles: css `
         min-height: 26vh;

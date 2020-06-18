@@ -10,6 +10,7 @@ import { faCopyright } from "@fortawesome/free-regular-svg-icons";
 import { faGithubAlt } from "@fortawesome/free-brands-svg-icons";
 
 import $ from "jquery";
+import GlobalStyles from "../GlobalStyles.js";
 
 
 class ConureQuoteWindow extends Component {
@@ -79,7 +80,7 @@ class ConureQuoteWindow extends Component {
         ))
 
         return (
-            <div id={this.props.id} className={ cx(Styles.QuoteWindowWrapper) }>
+            <div id={this.props.id} className={ cx(Styles.QuoteWindowWrapper, GlobalStyles.ShowOnFullScreen) }>
                 <h6 className={ cx("text-muted") }>
                     <small><i>Quote</i></small>
                 </h6>

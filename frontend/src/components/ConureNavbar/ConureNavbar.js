@@ -13,6 +13,7 @@ import { cx } from "emotion";
 import Styles from "./ConureNavbarStyles.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCopy } from "@fortawesome/free-regular-svg-icons"
+import { faSignInAlt } from "@fortawesome/free-solid-svg-icons";
 
 import $ from "jquery";
 
@@ -68,10 +69,12 @@ class ConureNavbar extends Component {
         return (
             <div id={this.props.id}>
                 <Navbar className={ cx( Styles.NavbarStyle, "shadow-sm" ) } bg="light" expand="lg">
-                    <Navbar.Brand className={ cx(Styles.PageTitleStyle) } data-target="#">
-                        <img className={ cx( Styles.LogoStyle ) }  src={this.props.logoLink}/>
-                        Conure
-                    </Navbar.Brand>
+                    <a href="https://www.conureapp.co.uk" className={ cx( Styles.LogoAnchorStyle ) }>
+                        <Navbar.Brand className={ cx(Styles.PageTitleStyle) } data-target="#">
+                            <img className={ cx( Styles.LogoStyle ) }  src={this.props.logoLink}/>
+                            <span className={ cx( Styles.LogoTextStyles) }>Conure</span>
+                        </Navbar.Brand>
+                    </a>
                     <OverlayTrigger trigger="hover" placement="bottom" overlay={popover}>
                         <span className={ cx( Styles.userKeyStyle ) } id="userKey">
                             <a href="#" className={ cx( Styles.CopyToClipboardStyles ) } onClick={this.copyIdToClipboard}>
@@ -81,7 +84,10 @@ class ConureNavbar extends Component {
                     </OverlayTrigger>
                     <Nav className="ml-auto">
                         <a data-target="#" id="LoginAnchor" className={ cx( Styles.LoginLinkWrapperStyle ) }>
-                            <small className={ cx( Styles.LoginLinkStyle ) } onClick={this.open}>Login</small>
+                            <small className={ cx( Styles.LoginLinkStyle ) } onClick={this.open}>
+                                <span className={ cx( Styles.LoginText ) }>Login</span>
+                                <FontAwesomeIcon icon={ faSignInAlt }></FontAwesomeIcon>
+                            </small>
                         </a>
                     </Nav>
                     {/*

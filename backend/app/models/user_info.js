@@ -6,7 +6,9 @@ const userInfoSchema = new mongoose.Schema({
     key: String,
     username: String,
     xp: Number,
-    taskCount: Number
+    taskCount: Number,
+    folderCount: Number,
+    taskCompletionPoints: Number
 });
 
 // Module Exports
