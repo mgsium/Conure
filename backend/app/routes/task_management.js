@@ -11,6 +11,7 @@ const GetFolder = require("../models/folder.js");
 const quotes = require("../utils/quotes.js");
 const Config = require("../utils/config.js");
 const { MONGO_PASSWORD, DB_NAME } = require("../utils/config.js");
+const e = require("express");
 
 module.exports = function(app) {
      // MongoDB via Mongoose
@@ -397,4 +398,19 @@ module.exports = function(app) {
     // ------------------------------------------------------------------------
     app.get("/quotes", (req, res) => { res.json({quotes}) });
     // ------------------------------------------------------------------------
+
+    // Check is a User Exists (/ A Key is Valid)
+    app.get("/userExists", (req, res) => {
+        try {
+            // Collecting Parameters
+            const coll_name = `user_${req.query.id}`;
+
+            const UserInfo = GetUserInfo(coll_name);
+            const count = UserInfo.find({}).lean().then(docs => docs.length > 0 ? true : false)
+                                                .then(userExists => res.json({ userExists: userExists }));
+        } catch ( error ) {
+            console.log(error);
+            res.json({ userExists: false });   
+        }
+    })
 }

@@ -42,6 +42,11 @@ const Styles = {
         height: 12.9vh;
         border-left: 1px solid gainsboro;
 
+        @media only screen and (min-device-width: 320px) and (max-device-width: 700px) {
+            width: 80vw;
+            border: none;
+        }
+
         @media(max-width: 700px) {
             width: 80vw;
             border: none;
@@ -55,6 +60,10 @@ const Styles = {
         right: -2vw;
         margin-top: 1.45vh;
         height: 1.7vh;
+
+        @media only screen and (min-device-width: 320px) and (max-device-width: 700px) {
+            width: 60vw;
+        }
 
         @media(max-width: 700px) {
             width: 60vw;
@@ -72,6 +81,11 @@ const Styles = {
         right: 40vw;
         bottom: 4.25vh;
 
+        @media only screen and (min-device-width: 320px) and (max-device-width: 700px) {
+            position: absolute;
+            left: -10vw;
+        }
+
         @media(max-width: 700px) {
             position: absolute;
             left: -10vw;
@@ -81,6 +95,10 @@ const Styles = {
         position: absolute;
         bottom: 3px;
         font-family: "Jost", sans-serif;
+
+        @media only screen and (min-device-width: 320px) and (max-device-width: 700px) {
+            display: none;
+        }
 
         @media(max-width: 700px) {
             display: none;

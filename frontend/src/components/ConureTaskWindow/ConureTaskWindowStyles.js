@@ -5,6 +5,10 @@ const Styles = {
         width: 40vw;
         font-family: "Jost", sans-serif;
 
+        @media only screen and (min-device-width: 320px) and (max-device-width: 700px) {
+            width: 100vw;
+        }
+
         @media(max-width: 700px) {
             width: 100vw;
         }
@@ -29,6 +33,10 @@ const Styles = {
 
         &:hover {
             overflow-y: auto;
+        }
+
+        @media only screen and (min-device-width: 320px) and (max-device-width: 700px) {
+            width: 100vw;
         }
 
         @media(max-width: 700px) {
@@ -63,6 +71,17 @@ const Styles = {
 
         &:active {
             background: rgba(0, 123, 255, 0.1);
+        }
+
+        @media only screen and (min-device-width: 320px) and (max-device-width: 700px) {
+            max-width: 100vw;
+            width: 100vw;
+            height: 8vh;
+            font-size: calc((2.8vw + 1vh)*0.8);
+
+            &:hover {
+                font-size: calc((2.8vw + 1vh)*0.7);
+            }
         }
 
         @media(max-width: 700px) {
@@ -103,7 +122,18 @@ const Styles = {
             background: rgba(123, 123, 0, 0.1);
         }
 
-        @media(max-width: 700px) {
+        @media only screen and (min-device-width: 320px) and (max-device-width: 700px) {
+            max-width: 100vw;
+            width: 100vw;
+            height: 8vh;
+            font-size: calc((2.8vw + 1vh)*0.8);
+
+            &:hover {
+                font-size: calc((2.8vw + 1vh)*0.7);
+            }
+        }
+
+        @media (max-width: 700px) {
             max-width: 100vw;
             width: 100vw;
             height: 8vh;
@@ -125,6 +155,11 @@ const Styles = {
         height: 10px;
         background: rgba(0, 0, 0, 0.05);
         borderBottom: 1px solid gainsboro;
+        
+        @media only screen and (min-device-width: 320px) and (max-device-width: 700px) {
+            width: 100vw;
+        }
+
         @media(max-width: 700px) {
             width: 100vw;
         }
@@ -148,7 +183,18 @@ const Styles = {
         font-size: 0.9em;
         border-left: 5px solid red;
 
-        @media(max-width: 700px) {
+        @media only screen and (min-device-width: 320px) and (max-device-width: 700px) {
+            max-width: 100vw;
+            width: 100vw;
+            height: 8vh;
+            font-size: calc((2.8vw + 1vh)*0.8);
+
+            &:hover {
+                font-size: calc((2.8vw + 1vh)*0.7);
+            }
+        }
+
+        @media (max-width: 700px) {
             max-width: 100vw;
             width: 100vw;
             height: 8vh;
@@ -163,6 +209,17 @@ const Styles = {
         width: 100%;
         border-top: 1px solid gainsboro;
         
+        @media only screen and (min-device-width: 320px) and (max-device-width: 700px) {
+            max-width: 100vw;
+            width: 100vw;
+            height: 8vh;
+            font-size: calc(2.8vw + 1vh);;
+
+            &:hover {
+                font-size: calc(2.8vw + 1vh);*0.9);
+            }
+        }
+
         @media(max-width: 700px) {
             max-width: 100vw;
             width: 100vw;
@@ -213,7 +270,19 @@ const Styles = {
             background: rgba(123, 123, 0, 0.1);
         }
 
-        @media(max-width: 700px) {
+        @media only screen and (min-device-width: 320px) and (max-device-width: 700px) {
+            max-width: 100vw;
+            width: 100vw;
+            height: 8vh;
+            max-height: 8vh;
+            font-size: calc((2.8vw + 1vh) * 0.9);
+
+            &:hover {
+                font-size: calc((2.8vw + 1vh)*0.8);
+            }
+        }
+
+        @media (max-width: 700px) {
             max-width: 100vw;
             width: 100vw;
             height: 8vh;
@@ -247,7 +316,18 @@ const Styles = {
             font-size: 0.9em;
         }
 
-        @media(max-width: 700px) {
+        @media only screen and (min-device-width: 320px) and (max-device-width: 700px) {
+            max-width: 100vw;
+            width: 100vw;
+            height: 8vh;
+            font-size: calc(2.8vw + 1vh);;
+
+            &:hover {
+                font-size: calc(2.8vw + 1vh);*0.9);
+            }
+        }
+
+        @media (max-width: 700px) {
             max-width: 100vw;
             width: 100vw;
             height: 8vh;
@@ -276,10 +356,15 @@ const Styles = {
             color: white;
         }
 
-        @media(max-width: 700px) {
+        @media only screen and (min-device-width: 320px) and (max-device-width: 700px) {
             height: 8vh;
             width: 8vh;
         } 
+
+        @media(max-width: 700px) {
+            height: 8vh;
+            width: 8vh;
+        }
     `,
     DeleteFolderButtonIconStyles: css `
         float: right;
@@ -295,6 +380,11 @@ const Styles = {
 
         &:hover {
             color: white;
+        }
+
+        @media only screen and (min-device-width: 320px) and (max-device-width: 700px) {
+            height: 8vh;
+            width: 8vh;
         }
 
         @media(max-width: 700px) {
@@ -320,6 +410,11 @@ const Styles = {
             color: white;;
         }
 
+        @media only screen and (min-device-width: 320px) and (max-device-width: 700px) {
+            height: 8vh;
+            width: 8vh;
+        }
+
         @media(max-width: 700px) {
             height: 8vh;
             width: 8vh;
@@ -342,7 +437,19 @@ const Styles = {
             font-size: 1.1em;
         }
 
-        @media(max-width: 700px) {
+        @media only screen and (min-device-width: 320px) and (max-device-width: 700px) {
+            max-width: 100vw;
+            width: 100vw;
+            height: 8vh;
+            max-height: 8vh;
+            font-size: calc((2.8vw + 1vh));
+
+            &:hover {
+                font-size: calc((2.8vw + 1vh)*1.1);
+            }
+        }
+
+        @media (max-width: 700px) {
             max-width: 100vw;
             width: 100vw;
             height: 8vh;
@@ -372,7 +479,19 @@ const Styles = {
             font-size: 1.1em;
         }
 
-        @media(max-width: 700px) {
+        @media only screen and (min-device-width: 320px) and (max-device-width: 700px) {
+            max-width: 100vw;
+            width: 100vw;
+            height: 8vh;
+            max-height: 8vh;
+            font-size: calc(2.8vw + 1vh);;
+
+            &:hover {
+                font-size: calc(2.8vw + 1vh);*0.9);
+            }
+        }
+
+        @media (max-width: 700px) {
             max-width: 100vw;
             width: 100vw;
             height: 8vh;
@@ -386,7 +505,13 @@ const Styles = {
     `,
     AddItemText: css `
         display: inline-block;
-        @media(min-width: 700px) {
+
+        @media only screen and (min-device-width: 320px) and (max-device-width: 700px) {
+            position: relative;
+            top: 0vh;
+        }
+
+        @media(max-width: 700px) {
             position: relative;
             top: 0vh;
         }

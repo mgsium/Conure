@@ -3,7 +3,7 @@ import { css } from "emotion";
 const GlobalStyles = {
     ShowOnFullScreen: css `
         display: none;
-        @media(min-width: 700px) {
+        @media(min-width: 700px) and (min-device-width: 700px){
             display: block;
         }
     `,

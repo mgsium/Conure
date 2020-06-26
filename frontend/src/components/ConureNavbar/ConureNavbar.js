@@ -33,7 +33,9 @@ class ConureNavbar extends Component {
     }
 
     open() {
-        this.setState({showModal: true});
+        this.setState({showModal: true}, () => {
+            $("#loginKey").keydown(this.props.hideUserExistsErrorMessage);
+        });
     }
 
     close() {
@@ -109,6 +111,9 @@ class ConureNavbar extends Component {
                                     <Form.Control id="loginKey" size="sm" type="text" placeholder="Enter base64 key"/>
                                     <Form.Text className="text-muted">
                                         Don't have an key? Use the form below to create an account.
+                                    </Form.Text>
+                                    <Form.Text className="text-muted" hidden={!this.props.showUserExistsErrorMessage}>
+                                        <span style={{"color": "red"}}>This key is invalid.</span>
                                     </Form.Text>
                                 </Form.Group>
                                 <Button type="button" variant="outline-danger" size="sm" onClick={() => this.props.loginHandler($("#loginKey").val())}>

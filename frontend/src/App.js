@@ -42,7 +42,8 @@ class App extends Component {
             currentFolder: {
                 _id: ""
             },
-            folderIsActive: true
+            folderIsActive: true,
+            showUserExistsErrorMessage: false
         };
 
         this.userIsLoggedIn = true;
@@ -97,6 +98,7 @@ class App extends Component {
         this.addXP = this.addXP.bind(this);
         this.resetXP = this.resetXP.bind(this);
         this.changeDefaultPointsScore = this.changeDefaultPointsScore.bind(this);
+        this.hideUserExistsErrorMessage = this.hideUserExistsErrorMessage.bind(this);
     }
 
     // Get User Data
@@ -537,7 +539,22 @@ class App extends Component {
     // Login
     Login(b64key) {
         // Check if account exists (backend request)
-        document.location = `${document.location.href.split("?")[0]}?id=${b64key}`;
+        let URL = `${this.props.backendUrl}/userExists?id=${b64key}`;
+        fetch(URL)
+        .then(res => res.json())
+        .then( doc => {
+            if ( doc.userExists ) {
+                document.location = `${document.location.href.split("?")[0]}?id=${b64key}`;
+            } else {
+                console.log(doc);
+                this.setState({showUserExistsErrorMessage: true});
+            }
+        })
+    }
+
+    // Hide User Exists Error Message
+    hideUserExistsErrorMessage() {
+        this.setState({showUserExistsErrorMessage: false});
     }
 
     // createAccount
@@ -672,6 +689,8 @@ class App extends Component {
                     logoLink={conure_light}
                     currentUser={this.state.user}
                     userIsLoggedIn={this.userIsLoggedIn}
+                    showUserExistsErrorMessage={this.state.showUserExistsErrorMessage}
+                    hideUserExistsErrorMessage={this.hideUserExistsErrorMessage}
                 />
                 <ConureTaskWindow 
                     id="ConureTaskWindow" 

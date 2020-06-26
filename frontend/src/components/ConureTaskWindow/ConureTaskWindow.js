@@ -33,8 +33,8 @@ class ConureTaskWindow extends Component {
         this.closeCreateFolderModal = this.closeCreateFolderModal.bind(this);
         this.openRenameFolderModal = this.openRenameFolderModal.bind(this);
         this.closeRenameFolderModal = this.closeRenameFolderModal.bind(this);
-        this.openCreateFolderModal = this.openCreateFolderModal.bind(this);
-        this.closeCreateFolderModal = this.closeCreateFolderModal.bind(this);
+        this.openCreateTaskModal = this.openCreateTaskModal.bind(this);
+        this.closeCreateTaskModal = this.closeCreateTaskModal.bind(this);
     }
 
     updateTaskBtn(outerThis) {
