@@ -1,6 +1,6 @@
 {
   "name": "conure",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A gamified to-do app built using NodeJS and ReactJS, as well as vanilla JavaScript.",
   "main": "index.js",
   "scripts": {

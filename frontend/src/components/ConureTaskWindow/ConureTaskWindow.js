@@ -99,29 +99,6 @@ class ConureTaskWindow extends Component {
     }
 
     render() {
-        /*
-        if (this.props.userIsLoggedIn) {
-            if (this.state.addTaskBtnText) {
-                console.log("Correct");
-            }
-            const addItemBtn = (
-                <ListGroup.Item className={ cx( Styles.AddTaskBtnStyle ) } onClick={ () => {$("#toggleCountdownBtn").click();this.props.addTask();}} variant="danger" disabled={!this.state.addTaskBtnText}>
-                {
-                this.state.addTaskBtnText ? "Add Task +" :
-                (
-                    <Spinner animation="border" variant="danger"/>
-                )   
-                }
-                </ListGroup.Item>
-            )
-        } else {
-            const addItemBtn = (
-                <ListGroup.Item className={ cx( Styles.AddTaskBtnStyle ) } variant="secondary" disabled={true}>
-                    Add Task +
-                </ListGroup.Item>
-            )
-        }
-        */
         const createFolderModal = (
             <Modal show={this.state.showCreateFolderModal} onHide={this.closeCreateFolderModal}>
                 <Modal.Header closeButton>
@@ -218,28 +195,26 @@ class ConureTaskWindow extends Component {
                         {
                             !(this.props.currentFolder._id == "") ? 
                             (
-                            <ListGroup.Item className={ cx( Styles.FolderBannerStyle ) } onClick={event => {
-                                this.openRenameFolderModal();
-                            }}>
-                                Folder: {this.props.currentFolder.name}
-                            </ListGroup.Item>
-                            ) : null
-                        }
-                        {
-                            !(this.props.currentFolder._id == "") ? 
-                            (
-                                <>
-                                    <ListGroup.Item className={ cx( Styles.FolderReturnStyle ) } onClick={event => {
+                            <div id="folder-banner-wrapper">
+                                <ListGroup.Item id="folder-banner" className={ cx( Styles.FolderBannerStyle ) } onClick={event => {
+                                    if (
+                                        (event.target.id && event.target.id != "folder-return-icon")
+                                        || (event.target.parentNode.id && event.target.parentNode.id != "folder-return-icon")
+                                    ) {
+                                        this.openRenameFolderModal();
+                                    } else {
                                         this.props.setCurrentFolder({_id: (this.props.currentFolder.parentFolderId ? this.props.currentFolder.parentFolderId : "")});
-                                        console.log(this.props.currentFolder.parentFolder);
-                                    }}>
-                                        <FontAwesomeIcon className={ cx( Styles.FolderReturnIconStyle ) } icon={ faArrowLeft }></FontAwesomeIcon>
-                                        Return
-                                    </ListGroup.Item>
-                                    <div className={ cx( Styles.NavDividerStyles ) }></div>
-                                </>
+                                    }
+                                }}>
+                                    Folder: {this.props.currentFolder.name}
+                                    <Button id="folder-return-icon" className={ cx(Styles.FolderReturnBtnStyles) } variant="success">
+                                        <FontAwesomeIcon className={ cx( Styles.FolderReturnIconStyle ) } icon={ faArrowLeft } size="lg"></FontAwesomeIcon>
+                                    </Button>
+                                </ListGroup.Item>
+                                <div className={ cx( Styles.NavDividerStyles ) }></div>
+                            </div>
                             ) : null
-                        }                
+                        }              
                         {
                             this.props.folders.filter(folder => folder.parentFolderId == this.props.currentFolder._id).map( (folder, index) =>
                                 <div id={folder._id} key={folder._id} className={ cx( Styles.FolderWrapperStyles) }>

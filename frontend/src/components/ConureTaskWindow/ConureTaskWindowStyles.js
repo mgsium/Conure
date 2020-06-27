@@ -89,66 +89,12 @@ const Styles = {
             width: 100vw;
             height: 8vh;
             font-size: calc((2.8vw + 1vh)*0.8);
-
-            &:hover {
-                font-size: calc((2.8vw + 1vh)*0.7);
-            }
-        }
-    `,
-    FolderReturnStyle: css `
-        width: 39.9vw;
-        font-family: "Jost", sans-serif;
-        font-weight: bold;
-        font-size: 4mm;
-        max-width: 39.9vw;
-        min-height: 50px;
-        background: rgb(236,248,127, 0.7);
-        color: rgba(20, 20, 0, 0.6);
-
-        word-wrap: break-word;
-        overflow-wrap: break-word;
-        -webkit-line-break: after-white-space;
-
-        transition: all 0.5s;
-
-        &:hover {
-            cursor: pointer;
-            background: rgba(0,0,0,0.05);
-            font-size: 0.9em;
-            border-left: 0.5vw solid green;
-        }
-
-        &:active {
-            background: rgba(123, 123, 0, 0.1);
-        }
-
-        @media only screen and (min-device-width: 320px) and (max-device-width: 700px) {
-            max-width: 100vw;
-            width: 100vw;
-            height: 8vh;
-            font-size: calc((2.8vw + 1vh)*0.8);
-
-            &:hover {
-                font-size: calc((2.8vw + 1vh)*0.7);
-            }
-        }
-
-        @media (max-width: 700px) {
-            max-width: 100vw;
-            width: 100vw;
-            height: 8vh;
-            font-size: calc((2.8vw + 1vh)*0.8);
-
             &:hover {
                 font-size: calc((2.8vw + 1vh)*0.7);
             }
         }
     `,
     FolderReturnIconStyle: css `
-        float: left;
-        position: relative;
-        top: 3px;
-        margin-right: 5px;
     `,
     NavDividerStyles: css `
         width: 39.9vw;
@@ -300,8 +246,8 @@ const Styles = {
         font-weight: bold;
         font-size: 4mm;
         max-width: 39.9vw;
-        min-height: 40px;
-        background: #FFF4BD;
+        min-height: 50px;
+        background: rgb(236,248,127, 0.7);
         color: rgba(20, 20, 0, 0.6);
 
         word-wrap: break-word;
@@ -502,6 +448,34 @@ const Styles = {
                 font-size: calc(2.8vw + 1vh);*0.9);
             }
         }
+    `,
+    FolderReturnBtnStyles: css `
+        float: right;
+        margin-top: 0px;
+        margin-bottom: 0px;
+        position: absolute;
+        right: -0.1vw;
+        bottom: 0;
+        min-width: 50px;
+        width: 4.2vw;
+        min-height: 51px;
+        height: 100%;
+        border-radius: 0px;
+        color: black;
+
+        &:hover {
+            color: white;;
+        }
+
+        @media only screen and (min-device-width: 320px) and (max-device-width: 700px) {
+            height: 8vh;
+            width: 8vh;
+        }
+
+        @media(max-width: 700px) {
+            height: 8vh;
+            width: 8vh;
+        }        
     `,
     AddItemText: css `
         display: inline-block;
