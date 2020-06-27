@@ -10,7 +10,7 @@ import { cx } from "emotion";
 import GlobalStyles from "../GlobalStyles.js";
 import Styles from "./ConureTaskWindowStyles.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFolder } from "@fortawesome/free-regular-svg-icons";
+import { faFolder, faFolderOpen } from "@fortawesome/free-regular-svg-icons";
 import { faExchangeAlt, faArrowLeft, faTimes, faCheck, faBullseye } from "@fortawesome/free-solid-svg-icons";
 
 import $ from "jquery";
@@ -206,6 +206,7 @@ class ConureTaskWindow extends Component {
                                         this.props.setCurrentFolder({_id: (this.props.currentFolder.parentFolderId ? this.props.currentFolder.parentFolderId : "")});
                                     }
                                 }}>
+                                    <FontAwesomeIcon className={ cx( Styles.OpenFolderIconStyles ) } icon={faFolderOpen} size="lg"></FontAwesomeIcon>
                                     Folder: {this.props.currentFolder.name}
                                     <Button id="folder-return-icon" className={ cx(Styles.FolderReturnBtnStyles) } variant="success">
                                         <FontAwesomeIcon className={ cx( Styles.FolderReturnIconStyle ) } icon={ faArrowLeft } size="lg"></FontAwesomeIcon>

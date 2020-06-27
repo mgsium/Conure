@@ -188,6 +188,12 @@ const Styles = {
         margin-right: 10px;
         color: rgba(50, 50, 0, 0.4);
     `,
+    OpenFolderIconStyles: css `
+        float: left;
+        position: relative;
+        top: 0px;
+        margin-right: 10px;
+    `,
     FolderStyle: css `
         width: 39.9vw;
         font-family: "Jost", sans-serif;
